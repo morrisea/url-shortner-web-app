@@ -35,7 +35,7 @@ Users will be able to enter a long URL and generate a unique shortened URL that 
 Registered users will be able to view a list of their shortened URLs and see information such as the original URL, shortened URL, and creation date.
 4. **Edit and Delete URLs** <br>
 Users will be able to modify or remove shortened URLs associated with their account.
-5. **Email noficiations** <br>
+5. **Email notifications** <br>
 Users will be able to share selected shortened URLs via email notifications.
 
 
