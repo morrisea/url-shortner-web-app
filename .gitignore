@@ -118,3 +118,4 @@ __pycache__/
 **.txt
 venv/
 !requirements.txt
+.env
