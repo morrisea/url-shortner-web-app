@@ -4,7 +4,16 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
-function App() {
+function Button({ text = "Click Me!", color = "blue", fontSize = 12 }) {
+  const buttonStyle = {
+    color: color,
+    fontSize: fontSize + "px"
+  };
+
+  return <button style={buttonStyle}>{text}</button>;
+}
+
+export default function App() {
   const [count, setCount] = useState(0)
 
   return (
@@ -80,7 +89,7 @@ function App() {
                   role="presentation"
                   aria-hidden="true"
                 >
-                  <use href="/icons.svg#discord-icon"></use>
+                  <use href="/icons.svg#url-icon"></use>
                 </svg>
                 Discord
               </a>
@@ -115,8 +124,8 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+      <Button text="dont click me!" color="red" />
     </>
   )
 }
 
-export default App
