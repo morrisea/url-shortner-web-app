@@ -76,8 +76,7 @@
 .register {
     display: flex;
     align-items: center;
-    padding-left: 75px;
-    margin-top: 8px;
+    margin-top: -10px;
 }
 
 .register span {
@@ -89,7 +88,7 @@
 button {
     display: flex;
     gap: 30px;
-    margin: 60px auto 24px auto;
+    margin: 40px auto 24px auto;
 
     transition: background-color 0.1s ease, box-shadow 0.1s ease;
 

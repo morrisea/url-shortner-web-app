@@ -37,7 +37,7 @@ function Header() {
 }
 
 function Button({ text = "Submit", className }) {
-  return <button className={className}>{text}</button>;
+  return <button className={className} type="submit">{text}</button>;
 }
 
 export default function AuthForm() {
@@ -53,12 +53,26 @@ export default function AuthForm() {
         });
     };
 
+    const handleSubmit = async event => {
+        event.preventDefault();
+
+        const res = await fetch('api/login', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const data = await res.json();
+    };
+
 
     return (
         <>
             <div className="container">
                 <Header />
-                <div className="inputs">
+                <form className="inputs" onSubmit={handleSubmit}>
                     <AuthInput type="email"
                             name="email"
                             svg="/icons.svg#email-icon"
@@ -72,10 +86,12 @@ export default function AuthForm() {
                             value={userData.password}
                             onChange={handleChange}
                     />
-                </div>
-                <div className="register">New to ShortURL? <span>Sign Up</span></div>
+                    <div>
+                        <div className="register">New to ShortURL? <span>Sign Up</span></div>
+                        <Button className="login" text="Log In" />
+                    </div>
+                </form>
 
-                <Button className="login" text="Log In" />
             </div>
         </>
     );
