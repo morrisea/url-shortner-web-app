@@ -13,7 +13,7 @@ nav ul {
     display: flex;
     justify-content: space-between;
     list-style-type: none;
-    padding: 0;
+    padding: 0 15px 0 15px;
     margin: 20px 10px 10px 10px;
 }
 
@@ -30,13 +30,12 @@ nav a {
 li span {
     color: var(--accent);
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
 
     padding-left: 15px;
 }
 
-.login-button {
-    background: var(--bg);
+.nav-button {
     padding: 10px 20px;
     border-radius: 25px;
     color: var(--text);

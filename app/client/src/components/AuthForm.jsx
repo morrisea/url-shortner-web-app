@@ -28,10 +28,10 @@ function AuthInput({ type, name, value, svg, onChange }) {
 function Header() {
     return (
         <>
-                <div className="header">
-                    <div className="text">Log In</div>
-                    <div className="underline"></div>
-                </div>
+            <div className="header">
+                <div className="text">Log In</div>
+                <div className="underline"></div>
+            </div>
         </>
     );
 }
@@ -91,7 +91,6 @@ export default function AuthForm() {
                         <Button className="login" text="Log In" />
                     </div>
                 </form>
-
             </div>
         </>
     );
