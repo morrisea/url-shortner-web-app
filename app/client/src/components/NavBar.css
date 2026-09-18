@@ -1,0 +1,50 @@
+.nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    background: var(--bg);
+    border-bottom: 1px solid var(--accent)
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 10px 10px 10px;
+}
+
+nav a {
+    text-decoration: none;
+}
+
+.url-icon {
+    margin: 0 25px 0 3px;
+    width: 25px;
+    height: 25px;
+}
+
+li span {
+    color: var(--accent);
+    font-size: 16px;
+    font-weight: 400;
+
+    padding-left: 15px;
+}
+
+.login-button {
+    background: var(--bg);
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: var(--text);
+
+    transition: background-color 0.1s ease, box-shadow 0.1s ease;
+
+    &:hover {
+      box-shadow: var(--shadow);
+      background: var(--card-bg)
+    }
+}
