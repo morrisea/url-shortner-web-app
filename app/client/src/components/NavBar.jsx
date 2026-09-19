@@ -21,7 +21,7 @@ export default function NavBar({ title, svg }) {
                         </li>
                         <li>
                             <a className="nav-button" href="/register">Sign Up</a>
-                            <a className="nav-button" href="/login">Login</a>
+                            <a className="nav-button" href="/login">Log In</a>
                         </li>
                     </ul>
                 </nav>

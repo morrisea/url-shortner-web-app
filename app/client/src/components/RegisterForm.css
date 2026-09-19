@@ -1,0 +1,115 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 200px;
+    width: 600px;
+    background: var(--card-bg);
+    padding-bottom: 30px;
+    border-radius: 2px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+    margin-top: 15%;
+}
+
+.text {
+    color: var(--text-h);
+    font-size: 36px;
+    font-weight:  600;
+}
+
+.underline {
+    width: 61px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 9px;
+    margin: 15px 0 0 5px;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 45px;
+    gap: 25px;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 480px;
+    height: 55px;
+    background: var(--text);
+    border-radius: 14px;
+    outline: 2px solid var(--border);
+
+    transition: background-color 0.1s ease,
+                box-shadow 0.1s ease;
+
+    &:hover {
+      box-shadow: var(--shadow);
+      background: var(--text-h)
+    }
+}
+
+.input:has(input:not(:placeholder-shown):valid) {
+    outline-color: var(--accent);
+}
+
+.input:has(input:not(:placeholder-shown):invalid) {
+    outline-color: var(--error);
+}
+
+.input-error {
+    outline-color: var(--error) !important;
+}
+
+.input svg {
+    margin: 0px;
+    width: 74px;
+    height: 24px;
+    filter: invert(50%);
+}
+
+.input input {
+    height: 50px;
+    width: 400px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--border);
+    font-size: 19px;
+}
+
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 440px;
+    height: 60px;
+    color: var(--text-h);
+    background: var(--accent);
+    border-radius: 50px;
+    border-width: 1px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.name {
+    display: flex;
+    flex-direction: row;
+    width: 480px;
+    gap: 20px;
+}
+
+.name .input {
+    width: 230px;
+}

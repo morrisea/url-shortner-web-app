@@ -39,6 +39,8 @@ li span {
     padding: 10px 20px;
     border-radius: 25px;
     color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
 
     transition: background-color 0.1s ease, box-shadow 0.1s ease;
 

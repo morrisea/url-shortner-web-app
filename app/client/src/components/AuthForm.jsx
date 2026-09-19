@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './AuthForm.css'
 
-function AuthInput({ type, name, value, svg, onChange }) {
+export function AuthInput({ type, name, value, svg, onChange }) {
     return (
         <>
             <div className="input">
@@ -25,18 +25,18 @@ function AuthInput({ type, name, value, svg, onChange }) {
     );
 }
 
-function Header() {
+export function Header({ title }) {
     return (
         <>
             <div className="header">
-                <div className="text">Log In</div>
+                <div className="text">{title}</div>
                 <div className="underline"></div>
             </div>
         </>
     );
 }
 
-function Button({ text = "Submit", className }) {
+export function Button({ text = "Submit", className }) {
   return <button className={className} type="submit">{text}</button>;
 }
 
@@ -71,7 +71,7 @@ export default function AuthForm() {
     return (
         <>
             <div className="container">
-                <Header />
+                <Header title='Log In'/>
                 <form className="inputs" onSubmit={handleSubmit}>
                     <AuthInput type="email"
                             name="email"
