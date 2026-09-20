@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Header } from './AuthForm'
+import PasswordCheckList from 'react-password-checklist'
 import './RegisterForm.css'
 
 function RegisterInput({ type, name, value, svg, placeholder, onChange, error, minLength, maxLength }) {
@@ -33,42 +34,59 @@ export default function RegisterForm() {
         lastName: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
     });
 
-    const [passwordConfirm, setConfirm] = useState("");
+    const [errors, setFormErrors] = useState({});
 
-const handleChange = event => {
-    const { name, value } = event.target;
+    const isValidPassword = password => {
+        return password.length >= 8 &&
+            /\d/.test(password) &&
+            /[A-Z]/.test(password) &&
+            /[^A-Za-z0-9]/.test(password);
+    };
 
-    setUserData({
-        ...userData,
-        [name]: value
-    });
+    const handleChange = event => {
+        const { name, value } = event.target;
 
-    if (name === "confirmPassword") {
-        setConfirm(value);
-    }
+        setUserData({
+            ...userData,
+            [name]: value
+        });
 
-    let password = userData.password;
-    let confirmPassword = passwordConfirm;
+        setFormErrors({
+            ...errors,
+            [name]: false,
+        });
+    };
 
-    if (name === "password") {
-        password = value;
-    }
+    const validatePassword = event => {
+        const { name, value } = event.target;
 
-    if (name === "confirmPassword") {
-        confirmPassword = value;
-    }
+        setUserData({
+            ...userData,
+            [name]: value
+        });
 
-    setErrors({
-        ...errors,
-        [name]: false,
-        confirmPassword: password !== confirmPassword
-    });
-};
+        let password = userData.password;
+        let confirmPassword = userData.confirmPassword;
 
-    const [errors, setErrors] = useState({});
+        if (name === "password") {
+            password = value;
+        }
+
+        if (name === "confirmPassword") {
+            confirmPassword = value;
+        }
+
+        setFormErrors({
+            ...errors,
+            password: !isValidPassword(password),
+            confirmPassword: password !== confirmPassword
+        });
+
+    };
+
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -87,15 +105,15 @@ const handleChange = event => {
             valueErrors.email = true;
         }
 
-        if (!userData.password) {
+        if (!isValidPassword(userData.password)) {
             valueErrors.password = true;
         }
 
-        if (userData.password !== passwordConfirm) {
+        if (userData.password !== userData.confirmPassword) {
             valueErrors.confirmPassword = true;
         }
 
-        setErrors(valueErrors);
+        setFormErrors(valueErrors);
 
         if (Object.keys(valueErrors).length > 0) {
             return;
@@ -103,7 +121,7 @@ const handleChange = event => {
 
         const res = await fetch('api/login', {
             method: 'POST',
-            header: {
+            headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(userData)
@@ -157,9 +175,9 @@ const handleChange = event => {
                             placeholder="Password"
                             svg="/icons.svg#lock-icon"
                             value={userData.password}
-                            onChange={handleChange}
+                            onChange={validatePassword}
                             minLength={8}
-                            maxLength={16}
+                            maxLength={32}
                             error={errors.password}
                     />
 
@@ -167,12 +185,25 @@ const handleChange = event => {
                             name="confirmPassword"
                             placeholder="Confirm Password"
                             svg={`/icons.svg#${errors.confirmPassword? "close" : "check"}-icon`}
-                            value={passwordConfirm}
-                            onChange={handleChange}
+                            value={userData.confirmPassword}
+                            onChange={validatePassword}
                             minLength={8}
-                            maxLength={16}
+                            maxLength={32}
                             error={errors.confirmPassword}
                     />
+
+                    <PasswordCheckList
+                        rules={[
+                            "minLength",
+                            "specialChar",
+                            "number",
+                            "capital",
+                            "match",
+                        ]}
+                        minLength={8}
+                        value={userData.password}
+                        valueAgain={userData.confirmPassword}
+                     />
                     <div>
                         <Button className="submit" />
                     </div>
