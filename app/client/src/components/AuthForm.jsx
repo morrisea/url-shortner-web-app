@@ -4,7 +4,7 @@ import './AuthForm.css'
 export function AuthInput({ type, name, value, svg, onChange }) {
     return (
         <>
-            <div className="input">
+            <div className="login-input">
                 <svg
                     className="button-icon"
                     role="presentation"
@@ -72,7 +72,7 @@ export default function AuthForm() {
         <>
             <div className="container">
                 <Header title='Log In'/>
-                <form className="inputs" onSubmit={handleSubmit}>
+                <form className="login-inputs" onSubmit={handleSubmit}>
                     <AuthInput type="email"
                             name="email"
                             svg="/icons.svg#email-icon"
