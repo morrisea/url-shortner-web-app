@@ -1,31 +1,36 @@
-import './NavBar.css'
+import './NavBar.css';
+import { Link } from 'react-router-dom';
 
 export default function NavBar({ title, svg }) {
-    return (
-        <>
-            <div className="nav-container">
-                <nav>
-                    <ul>
-                        <li>
-                            <a href="/">
-                                <span className="icon">{title}</span>
+  return (
+    <>
+      <div className='nav-container'>
+        <nav>
+          <ul>
+            <li>
+              <Link to='/'>
+                <span className='icon'>{title}</span>
 
-                                <svg
-                                    className="url-icon"
-                                    role="presentation"
-                                    aria-hidden="true"
-                                >
-                                    <use href={svg}></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a className="nav-button" href="/register">Sign Up</a>
-                            <a className="nav-button" href="/login">Log In</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </>
-    )
+                <svg
+                  className='url-icon'
+                  role='presentation'
+                  aria-hidden='true'
+                >
+                  <use href={svg}></use>
+                </svg>
+              </Link>
+            </li>
+            <li>
+              <Link className='nav-button' to='/register'>
+                Sign Up
+              </Link>
+              <Link className='nav-button' to='/login'>
+                Log In
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </>
+  );
 }

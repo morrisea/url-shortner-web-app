@@ -13,14 +13,13 @@ function RegisterInput({
   error,
   minLength,
   maxLength,
+  autoComplete,
 }) {
   return (
     <div className={`input ${error ? 'input-error' : ''}`}>
-      {svg && (
-        <svg className='button-icon' role='presentation' aria-hidden='true'>
-          <use href={svg}></use>
-        </svg>
-      )}
+      <svg role='presentation' aria-hidden='true'>
+        {svg && <use href={svg}></use>}
+      </svg>
 
       <input
         placeholder={placeholder}
@@ -30,6 +29,7 @@ function RegisterInput({
         onChange={onChange}
         minLength={minLength}
         maxLength={maxLength}
+        autoComplete={autoComplete}
       />
     </div>
   );
@@ -72,27 +72,24 @@ export default function RegisterForm() {
   const validatePassword = (event) => {
     const { name, value } = event.target;
 
-    setUserData({
-      ...userData,
+    setUserData((prev) => ({
+      ...prev,
       [name]: value,
-    });
-
-    let password = userData.password;
-    let confirmPassword = userData.confirmPassword;
+    }));
 
     if (name === 'password') {
-      password = value;
+      setFormErrors((prev) => ({
+        ...prev,
+        password: !isValidPassword(value),
+      }));
     }
 
     if (name === 'confirmPassword') {
-      confirmPassword = value;
+      setFormErrors((prev) => ({
+        ...prev,
+        confirmPassword: value !== userData.password,
+      }));
     }
-
-    setFormErrors({
-      ...errors,
-      password: !isValidPassword(password),
-      confirmPassword: password !== confirmPassword,
-    });
   };
 
   const handleSubmit = async (event) => {
@@ -151,12 +148,13 @@ export default function RegisterForm() {
               type='text'
               name='firstName'
               placeholder='First Name'
-              svg=''
+              svg={null}
               value={userData.firstName}
               onChange={handleChange}
               minLength={1}
               maxLength={32}
               error={errors.firstName}
+              autoComplete='given-name'
             />
 
             <RegisterInput
@@ -169,6 +167,7 @@ export default function RegisterForm() {
               minLength={1}
               maxLength={32}
               error={errors.lastName}
+              autoComplete='family-name'
             />
           </div>
           <RegisterInput
@@ -179,6 +178,7 @@ export default function RegisterForm() {
             value={userData.email}
             onChange={handleChange}
             error={errors.email}
+            autoComplete='email'
           />
 
           <RegisterInput
@@ -191,6 +191,7 @@ export default function RegisterForm() {
             minLength={8}
             maxLength={32}
             error={errors.password}
+            autoComplete='new-password'
           />
 
           <RegisterInput
@@ -203,6 +204,7 @@ export default function RegisterForm() {
             minLength={8}
             maxLength={32}
             error={errors.confirmPassword}
+            autoComplete='off'
           />
 
           <PasswordCheckList
