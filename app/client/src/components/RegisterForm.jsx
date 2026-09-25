@@ -1,214 +1,221 @@
-import { useState } from 'react'
-import { Button, Header } from './AuthForm'
-import PasswordCheckList from 'react-password-checklist'
-import './RegisterForm.css'
+import { useState } from 'react';
+import { Button, Header } from './AuthForm';
+import PasswordCheckList from 'react-password-checklist';
+import './RegisterForm.css';
 
-function RegisterInput({ type, name, value, svg, placeholder, onChange, error, minLength, maxLength }) {
-    return (
-        <>
-            <div className={`input ${error ? "input-error" : ""}`}>
-                <svg
-                    className="button-icon"
-                    role="presentation"
-                    aria-hidden="true"
-                >
-                    <use href={svg}></use>
-                </svg>
+function RegisterInput({
+  type,
+  name,
+  value,
+  svg,
+  placeholder,
+  onChange,
+  error,
+  minLength,
+  maxLength,
+}) {
+  return (
+    <div className={`input ${error ? 'input-error' : ''}`}>
+      {svg && (
+        <svg className='button-icon' role='presentation' aria-hidden='true'>
+          <use href={svg}></use>
+        </svg>
+      )}
 
-                <input placeholder={placeholder}
-                    name={name}
-                    type={type}
-                    value={value}
-                    onChange={onChange}
-                    minLength={minLength}
-                    maxLength={maxLength}
-                />
-            </div>
-        </>
-    );
+      <input
+        placeholder={placeholder}
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+        minLength={minLength}
+        maxLength={maxLength}
+      />
+    </div>
+  );
 }
 
 export default function RegisterForm() {
-    const [userData, setUserData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
+  const [userData, setUserData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const [errors, setFormErrors] = useState({});
+
+  const isValidPassword = (password) => {
+    return (
+      password.length >= 8 &&
+      /\d/.test(password) &&
+      /[A-Z]/.test(password) &&
+      /[^A-Za-z0-9]/.test(password)
+    );
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setUserData({
+      ...userData,
+      [name]: value,
     });
 
-    const [errors, setFormErrors] = useState({});
+    setFormErrors({
+      ...errors,
+      [name]: false,
+    });
+  };
 
-    const isValidPassword = password => {
-        return password.length >= 8 &&
-            /\d/.test(password) &&
-            /[A-Z]/.test(password) &&
-            /[^A-Za-z0-9]/.test(password);
-    };
+  const validatePassword = (event) => {
+    const { name, value } = event.target;
 
-    const handleChange = event => {
-        const { name, value } = event.target;
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
 
-        setUserData({
-            ...userData,
-            [name]: value
-        });
+    let password = userData.password;
+    let confirmPassword = userData.confirmPassword;
 
-        setFormErrors({
-            ...errors,
-            [name]: false,
-        });
-    };
+    if (name === 'password') {
+      password = value;
+    }
 
-    const validatePassword = event => {
-        const { name, value } = event.target;
+    if (name === 'confirmPassword') {
+      confirmPassword = value;
+    }
 
-        setUserData({
-            ...userData,
-            [name]: value
-        });
+    setFormErrors({
+      ...errors,
+      password: !isValidPassword(password),
+      confirmPassword: password !== confirmPassword,
+    });
+  };
 
-        let password = userData.password;
-        let confirmPassword = userData.confirmPassword;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-        if (name === "password") {
-            password = value;
-        }
+    const valueErrors = {};
 
-        if (name === "confirmPassword") {
-            confirmPassword = value;
-        }
+    if (!userData.firstName) {
+      valueErrors.firstName = true;
+    }
 
-        setFormErrors({
-            ...errors,
-            password: !isValidPassword(password),
-            confirmPassword: password !== confirmPassword
-        });
+    if (!userData.lastName) {
+      valueErrors.lastName = true;
+    }
 
-    };
+    if (!userData.email) {
+      valueErrors.email = true;
+    }
 
+    if (!isValidPassword(userData.password)) {
+      valueErrors.password = true;
+    }
 
-    const handleSubmit = async event => {
-        event.preventDefault();
+    if (userData.password !== userData.confirmPassword) {
+      valueErrors.confirmPassword = true;
+    }
 
-        const valueErrors = {};
+    setFormErrors(valueErrors);
 
-        if (!userData.firstName) {
-            valueErrors.firstName = true;
-        }
+    if (Object.keys(valueErrors).length > 0) {
+      return;
+    }
 
-        if (!userData.lastName) {
-            valueErrors.lastName = true;
-        }
+    const apiUrl = import.meta.env.VITE_API_URL;
+    console.log(`${apiUrl}`);
 
-        if (!userData.email) {
-            valueErrors.email = true;
-        }
+    const res = await fetch(`${apiUrl}/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
 
-        if (!isValidPassword(userData.password)) {
-            valueErrors.password = true;
-        }
+    const data = await res.json();
+    console.log('success');
+  };
 
-        if (userData.password !== userData.confirmPassword) {
-            valueErrors.confirmPassword = true;
-        }
+  return (
+    <>
+      <div className='container'>
+        <Header title='Sign Up' />
+        <form className='inputs' onSubmit={handleSubmit}>
+          <div className='name'>
+            <RegisterInput
+              type='text'
+              name='firstName'
+              placeholder='First Name'
+              svg=''
+              value={userData.firstName}
+              onChange={handleChange}
+              minLength={1}
+              maxLength={32}
+              error={errors.firstName}
+            />
 
-        setFormErrors(valueErrors);
+            <RegisterInput
+              type='text'
+              name='lastName'
+              placeholder='Last Name'
+              svg={null}
+              value={userData.lastName}
+              onChange={handleChange}
+              minLength={1}
+              maxLength={32}
+              error={errors.lastName}
+            />
+          </div>
+          <RegisterInput
+            type='email'
+            name='email'
+            placeholder='Email'
+            svg='/icons.svg#email-icon'
+            value={userData.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
 
-        if (Object.keys(valueErrors).length > 0) {
-            return;
-        }
+          <RegisterInput
+            type='password'
+            name='password'
+            placeholder='Password'
+            svg='/icons.svg#lock-icon'
+            value={userData.password}
+            onChange={validatePassword}
+            minLength={8}
+            maxLength={32}
+            error={errors.password}
+          />
 
-        const res = await fetch('api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        });
+          <RegisterInput
+            type='password'
+            name='confirmPassword'
+            placeholder='Confirm Password'
+            svg={`/icons.svg#${errors.confirmPassword ? 'close' : 'check'}-icon`}
+            value={userData.confirmPassword}
+            onChange={validatePassword}
+            minLength={8}
+            maxLength={32}
+            error={errors.confirmPassword}
+          />
 
-        const data = await res.json();
-
-    };
-
-
-    return (
-        <>
-            <div className="container">
-                <Header title='Sign Up'/>
-                <form className="inputs" onSubmit={handleSubmit}>
-                    <div className="name">
-                        <RegisterInput type="text"
-                                name="firstName"
-                                placeholder="First Name"
-                                svg=""
-                                value={userData.firstName}
-                                onChange={handleChange}
-                                minLength={1}
-                                maxLength={32}
-                                error={errors.firstName}
-                        />
-
-                        <RegisterInput type="text"
-                                name="lastName"
-                                placeholder="Last Name"
-                                svg=" "
-                                value={userData.lastName}
-                                onChange={handleChange}
-                                minLength={1}
-                                maxLength={32}
-                                error={errors.lastName}
-                        />
-                    </div>
-                    <RegisterInput type="email"
-                            name="email"
-                            placeholder="Email"
-                            svg="/icons.svg#email-icon"
-                            value={userData.email}
-                            onChange={handleChange}
-                            error={errors.email}
-
-                    />
-
-                    <RegisterInput type="password"
-                            name="password"
-                            placeholder="Password"
-                            svg="/icons.svg#lock-icon"
-                            value={userData.password}
-                            onChange={validatePassword}
-                            minLength={8}
-                            maxLength={32}
-                            error={errors.password}
-                    />
-
-                    <RegisterInput type="password"
-                            name="confirmPassword"
-                            placeholder="Confirm Password"
-                            svg={`/icons.svg#${errors.confirmPassword? "close" : "check"}-icon`}
-                            value={userData.confirmPassword}
-                            onChange={validatePassword}
-                            minLength={8}
-                            maxLength={32}
-                            error={errors.confirmPassword}
-                    />
-
-                    <PasswordCheckList
-                        rules={[
-                            "minLength",
-                            "specialChar",
-                            "number",
-                            "capital",
-                            "match",
-                        ]}
-                        minLength={8}
-                        value={userData.password}
-                        valueAgain={userData.confirmPassword}
-                     />
-                    <div>
-                        <Button className="submit" />
-                    </div>
-                </form>
-            </div>
-        </>
-    );
+          <PasswordCheckList
+            rules={['minLength', 'specialChar', 'number', 'capital', 'match']}
+            minLength={8}
+            value={userData.password}
+            valueAgain={userData.confirmPassword}
+          />
+          <div>
+            <Button className='submit' />
+          </div>
+        </form>
+      </div>
+    </>
+  );
 }

@@ -1,10 +1,11 @@
 import { defineConfig } from 'drizzle-kit';
+import { dbConfig } from './src/config/db.conf.js'
 
 export default defineConfig({
   schema: './src/database/schema.ts',
   out: './drizzle',
   dialect: 'mysql',
   dbCredentials: {
-    url: process.env.DB_URL!,
+    url: dbConfig.url,
   },
 });

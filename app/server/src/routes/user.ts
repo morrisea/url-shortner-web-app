@@ -1,11 +1,8 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { register } from '../controllers/auth.controller.js';
+
 const user = Router();
 
-user.get('/', (req: Request, res: Response) => {
-  res.status(200).json({
-    message: 'response by get api'
-
-    });
-});
+user.post('/api/auth/register', register);
 
 export default user;

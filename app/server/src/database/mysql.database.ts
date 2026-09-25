@@ -1,3 +1,4 @@
+import { dbConfig } from '../config/db.conf.js';
 import { drizzle } from 'drizzle-orm/mysql2';
 
-export const db = drizzle(process.env.DB_URL!);
+export const db = drizzle(dbConfig.url!);
