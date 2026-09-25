@@ -4,11 +4,11 @@ WORKDIR /workspace
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --include=dev
 
 COPY . .
 
 EXPOSE 3000
 
-# CMD ["npm", "start"]
-CMD ["tail", "-f", "/dev/null"]
+CMD ["npm", "run", "dev"]
+# CMD ["tail", "-f", "/dev/null"]
