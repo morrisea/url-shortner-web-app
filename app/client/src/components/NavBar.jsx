@@ -1,7 +1,27 @@
 import './NavBar.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function NavBar({ title, svg }) {
+  const location = useLocation();
+
+  const navLinks = [
+    {
+      name: 'Register',
+      path: '/register',
+      includeOn: ['/', '/login'],
+    },
+    {
+      name: 'Login',
+      path: '/login',
+      includeOn: ['/', '/register'],
+    },
+    {
+      name: 'Dashboard',
+      path: '/dashboard',
+      includeOn: ['/dashboard'],
+    },
+  ];
+
   return (
     <>
       <div className='nav-container'>
@@ -21,12 +41,14 @@ export default function NavBar({ title, svg }) {
               </Link>
             </li>
             <li>
-              <Link className='nav-button' to='/register'>
-                Sign Up
-              </Link>
-              <Link className='nav-button' to='/login'>
-                Log In
-              </Link>
+              {navLinks.map(
+                (link) =>
+                  link.includeOn.includes(location.pathname) && (
+                    <Link className='nav-button' key={link.path} to={link.path}>
+                      {link.name}
+                    </Link>
+                  ),
+              )}
             </li>
           </ul>
         </nav>
