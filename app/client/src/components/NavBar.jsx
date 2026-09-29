@@ -8,12 +8,12 @@ export default function NavBar({ title, svg }) {
     {
       name: 'Register',
       path: '/register',
-      includeOn: ['/', '/login'],
+      includeOn: ['/', '/register', '/login'],
     },
     {
       name: 'Login',
       path: '/login',
-      includeOn: ['/', '/register'],
+      includeOn: ['/', '/register', '/login'],
     },
     {
       name: 'Dashboard',
