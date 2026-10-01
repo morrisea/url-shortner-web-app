@@ -56,18 +56,30 @@ export default function RegisterForm() {
     );
   };
 
+  const isValidEmail = (email) => {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setUserData({
-      ...userData,
+    setUserData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
 
-    setFormErrors({
-      ...errors,
+    if (name === 'email') {
+      setFormErrors((prev) => ({
+        ...prev,
+        email: !isValidEmail(value),
+      }));
+      return;
+    }
+
+    setFormErrors((prev) => ({
+      ...prev,
       [name]: false,
-    });
+    }));
   };
 
   const validatePassword = (event) => {
@@ -96,29 +108,36 @@ export default function RegisterForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const valueErrors = {};
+    const isError = {};
+    const errorMessages = {};
 
     if (!userData.firstName) {
-      valueErrors.firstName = true;
+      isError.firstName = true;
+      errorMessages.firstName = 'Invalid first Name';
     }
 
     if (!userData.lastName) {
-      valueErrors.lastName = true;
+      isError.lastName = true;
+      errorMessages.lastName = 'Invalid last name';
     }
 
-    if (!userData.email) {
-      valueErrors.email = true;
+    if (!userData.email || !isValidEmail(userData.email)) {
+      isError.email = true;
+      errorMessages.email = 'Invalid email';
     }
 
     if (!isValidPassword(userData.password)) {
-      valueErrors.password = true;
+      isError.password = true;
+      errorMessages.password = 'Password does not meet requirements';
     }
 
     if (userData.password !== userData.confirmPassword) {
-      valueErrors.confirmPassword = true;
+      isError.confirmPassword = true;
+      errorMessages.confirmPassword = 'Passwords do not match';
     }
 
-    setFormErrors(valueErrors);
+    setFormErrors(isError);
+    setFormErrors(errorMessages);
 
     if (Object.keys(valueErrors).length > 0) {
       return;
@@ -141,7 +160,7 @@ export default function RegisterForm() {
     <>
       <div className='register-card'>
         <Header title='Sign Up' />
-        <form className='reg-inputs' onSubmit={handleSubmit}>
+        <form className='reg-inputs' onSubmit={handleSubmit} noValidate>
           <div className='name'>
             <RegisterInput
               type='text'
@@ -212,6 +231,12 @@ export default function RegisterForm() {
             value={userData.password}
             valueAgain={userData.confirmPassword}
           />
+          <div className='form-errors'>
+            {Object.values(errors).map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
+          </div>
+
           <div>
             <Button />
           </div>

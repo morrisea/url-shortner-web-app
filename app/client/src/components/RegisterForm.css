@@ -45,3 +45,13 @@
 .name .input {
   width: 230px;
 }
+
+.form-errors {
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+  min-height: 20px;
+  margin: -20px auto -55px;
+  color: var(--error);
+  font-size: 14px;
+}

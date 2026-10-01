@@ -1,15 +1,14 @@
 :root {
-  --text: #B6BFB8;
-  --text-h: #F2F5F3;
+  --text: #b6bfb8;
+  --text-h: #f2f5f3;
   --bg: #000;
   --border: #2e303a;
   --card-bg: #101411;
-  --accent: #0FBF3E;
-  --hover: #08872B;
+  --accent: #0fbf3e;
+  --hover: #08872b;
   --error: #e53935;
   --shadow:
-    rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
-    rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
