@@ -1,54 +1,21 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Button } from './Button';
+import { Header } from './Header';
+import { Input } from './Input';
 import './AuthForm.css';
 
-export function AuthInput({ type, name, value, svg, onChange }) {
-  return (
-    <>
-      <div className='login-input'>
-        <svg className='button-icon' role='presentation' aria-hidden='true'>
-          <use href={svg}></use>
-        </svg>
-
-        <input
-          placeholder={name.charAt(0).toUpperCase() + name.slice(1)}
-          name={name}
-          type={type}
-          value={value}
-          onChange={onChange}
-          required
-        />
-      </div>
-    </>
-  );
-}
-
-export function Header({ title }) {
-  return (
-    <>
-      <div className='header'>
-        <div className='text'>{title}</div>
-        <div className='underline'></div>
-      </div>
-    </>
-  );
-}
-
-export function Button({ text = 'Submit', className }) {
-  return (
-    <button className={className} type='submit'>
-      {text}
-    </button>
-  );
-}
-
 export default function AuthForm() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({
     email: '',
     password: '',
   });
 
-  const handleChange = (event) => {
+  const handleInput = (event) => {
     setUserData({
       ...userData,
       [event.target.name]: event.target.value,
@@ -58,15 +25,24 @@ export default function AuthForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const res = await fetch('api/login', {
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    const res = await fetch(`${apiUrl}/login`, {
       method: 'POST',
-      header: {
+      headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(userData),
+      credentials: 'include',
     });
 
-    const data = await res.json();
+    if (res.ok) {
+      const data = await res.json();
+
+      auth.setAccessToken(data.accessToken);
+
+      navigate('/dashboard');
+    }
   };
 
   return (
@@ -74,20 +50,20 @@ export default function AuthForm() {
       <div className='container'>
         <Header title='Log In' />
         <form className='login-inputs' onSubmit={handleSubmit}>
-          <AuthInput
+          <Input
             type='email'
             name='email'
             svg='/icons.svg#email-icon'
             value={userData.email}
-            onChange={handleChange}
+            onChange={handleInput}
           />
 
-          <AuthInput
+          <Input
             type='password'
             name='password'
             svg='/icons.svg#lock-icon'
             value={userData.password}
-            onChange={handleChange}
+            onChange={handleInput}
           />
           <div>
             <div className='register'>

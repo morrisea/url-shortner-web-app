@@ -90,21 +90,6 @@
   text-decoration: none;
 }
 
-button {
-  display: flex;
-  gap: 30px;
-  margin: 40px auto 24px auto;
-
-  transition:
-    background-color 0.1s ease,
-    box-shadow 0.1s ease;
-
-  &:hover {
-    box-shadow: var(--shadow);
-    background: var(--hover);
-  }
-}
-
 .login {
   display: flex;
   justify-content: center;
@@ -118,4 +103,15 @@ button {
   font-size: 19px;
   font-weight: 700;
   cursor: pointer;
+  gap: 30px;
+  margin: 40px auto 24px auto;
+
+  transition:
+    background-color 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover {
+    box-shadow: var(--shadow);
+    background: var(--hover);
+  }
 }

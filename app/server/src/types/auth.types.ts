@@ -8,4 +8,15 @@ export interface RegisterRequestBody {
 
 export interface RegisterResponseBody {
   message: string;
+  data?: JSON | null;
+}
+
+export interface LoginRequestBody {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponseBody {
+  message: string;
+  accessToken?: string;
 }

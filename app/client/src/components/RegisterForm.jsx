@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Button, Header } from './AuthForm';
+import { Header } from './Header';
+import { Button } from './Button';
 import PasswordCheckList from 'react-password-checklist';
 import './RegisterForm.css';
 
@@ -124,9 +125,8 @@ export default function RegisterForm() {
     }
 
     const apiUrl = import.meta.env.VITE_API_URL;
-    console.log(`${apiUrl}`);
 
-    const res = await fetch(`${apiUrl}/auth/register`, {
+    const res = await fetch(`${apiUrl}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -135,7 +135,6 @@ export default function RegisterForm() {
     });
 
     const data = await res.json();
-    console.log('success');
   };
 
   return (
