@@ -39,7 +39,9 @@ export default function UserData() {
         <div>
           <p>User ID: {userData.user.userId}</p>
           <p>Email: {userData.user.email}</p>
-          Token TTL: {(userData.user.exp - userData.user.iat) / 60} minutes
+          <p>
+            Token TTL: {(userData.user.exp - userData.user.iat) / 60} minutes
+          </p>
         </div>
       )}
     </>

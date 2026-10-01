@@ -17,7 +17,7 @@ function RegisterInput({
   autoComplete,
 }) {
   return (
-    <div className={`input ${error ? 'input-error' : ''}`}>
+    <div className={`reg-input ${error ? 'input-error' : ''}`}>
       <svg role='presentation' aria-hidden='true'>
         {svg && <use href={svg}></use>}
       </svg>
@@ -139,7 +139,7 @@ export default function RegisterForm() {
     setFormErrors(isError);
     setFormErrors(errorMessages);
 
-    if (Object.keys(valueErrors).length > 0) {
+    if (Object.keys(isError).length > 0) {
       return;
     }
 

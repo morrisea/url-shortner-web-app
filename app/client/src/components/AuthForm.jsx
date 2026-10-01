@@ -9,6 +9,12 @@ import './AuthForm.css';
 export default function AuthForm() {
   const { accessToken, setAccessToken, loading } = useAuth();
   const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (!loading && accessToken) {
@@ -16,16 +22,13 @@ export default function AuthForm() {
     }
   }, [accessToken, loading, navigate]);
 
-  const [userData, setUserData] = useState({
-    email: '',
-    password: '',
-  });
-
   const handleInput = (event) => {
     setUserData({
       ...userData,
       [event.target.name]: event.target.value,
     });
+
+    setErrors({});
   };
 
   const handleSubmit = async (event) => {
@@ -48,6 +51,8 @@ export default function AuthForm() {
       setAccessToken(data.accessToken);
 
       navigate('/dashboard');
+    } else {
+      setErrors({ message: 'Invalid email or password' });
     }
   };
 
@@ -55,7 +60,7 @@ export default function AuthForm() {
     <>
       <div className='auth-card'>
         <Header title='Log In' />
-        <form className='login-inputs' onSubmit={handleSubmit}>
+        <form className='login-inputs' onSubmit={handleSubmit} noValidate>
           <Input
             type='email'
             name='email'
@@ -71,12 +76,17 @@ export default function AuthForm() {
             value={userData.password}
             onChange={handleInput}
           />
-          <div>
+          <div className='login-info'>
             <div className='register'>
               New to ShortURL?
               <Link className='register-link' to='/register'>
                 Sign Up
               </Link>
+            </div>
+            <div className='login-errors'>
+              {Object.values(errors).map((error, index) => (
+                <div key={index}>{error}</div>
+              ))}
             </div>
             <Button text='Log In' />
           </div>

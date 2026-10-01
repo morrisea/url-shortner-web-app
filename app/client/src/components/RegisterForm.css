@@ -16,19 +16,48 @@
   gap: 25px;
 }
 
-.input:has(input:not(:placeholder-shown):valid) {
+.reg-input {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 480px;
+  height: 55px;
+  background: var(--text);
+  border-radius: 14px;
+  outline: 2px solid var(--border);
+  transition:
+    background-color 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover {
+    background: var(--text-h);
+    box-shadow: var(--shadow);
+  }
+}
+
+.reg-input input {
+  flex: 1;
+  height: 50px;
+  color: var(--border);
+  font-size: 19px;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.reg-input:has(input:not(:placeholder-shown):valid) {
   outline-color: var(--accent);
 }
 
-.input:has(input:not(:placeholder-shown):invalid) {
+.reg-input:has(input:not(:placeholder-shown):invalid) {
   outline-color: var(--error);
 }
 
-.input-error {
+.reg-input-error {
   outline-color: var(--error) !important;
 }
 
-.input svg {
+.reg-input svg {
   margin: 0px;
   width: 74px;
   height: 24px;
@@ -42,8 +71,9 @@
   gap: 20px;
 }
 
-.name .input {
-  width: 230px;
+.name .reg-input {
+  flex: 1;
+  min-width: 0;
 }
 
 .form-errors {
