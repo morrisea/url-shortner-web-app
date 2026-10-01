@@ -41,11 +41,6 @@ export default function NavBar({ title, svg }) {
       path: '/dashboard',
       includeOn: ['/', '/dashboard'],
     },
-    {
-      name: 'Log Out',
-      path: '/',
-      includeOn: ['/', '/register', '/login', '/dashboard'],
-    },
   ];
 
   const links = accessToken ? tokenNavLinks : navLinks;
@@ -72,21 +67,16 @@ export default function NavBar({ title, svg }) {
           <li>
             {links
               .filter((link) => link.includeOn.includes(location.pathname))
-              .map((link) =>
-                link.name === 'Log Out' ? (
-                  <button
-                    className='nav-button'
-                    key={link.name}
-                    onClick={handleLogout}
-                  >
-                    {link.name}
-                  </button>
-                ) : (
-                  <Link className='nav-button' key={link.path} to={link.path}>
-                    {link.name}
-                  </Link>
-                ),
-              )}
+              .map((link) => (
+                <Link className='nav-button' key={link.path} to={link.path}>
+                  {link.name}
+                </Link>
+              ))}
+            {accessToken && (
+              <button className='nav-button' onClick={handleLogout}>
+                Log Out
+              </button>
+            )}
           </li>
         </ul>
       </nav>

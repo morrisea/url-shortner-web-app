@@ -1,0 +1,35 @@
+.input {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 480px;
+  height: 55px;
+  background: var(--text);
+  border-radius: 14px;
+  outline: 2px solid var(--border);
+  transition:
+    background-color 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover {
+    background: var(--text-h);
+    box-shadow: var(--shadow);
+  }
+}
+
+.input svg {
+  width: 24px;
+  height: 24px;
+  margin: 0 25px;
+  filter: invert(50%);
+}
+
+.input input {
+  flex: 1;
+  height: 50px;
+  color: var(--border);
+  font-size: 19px;
+  background: transparent;
+  border: none;
+  outline: none;
+}

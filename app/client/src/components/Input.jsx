@@ -1,8 +1,10 @@
+import './Input.css';
+
 export function Input({ type, name, value, svg, onChange }) {
   return (
     <>
-      <div className='login-input'>
-        <svg className='button-icon' role='presentation' aria-hidden='true'>
+      <div className='input'>
+        <svg role='presentation' aria-hidden='true'>
           <use href={svg}></use>
         </svg>
 

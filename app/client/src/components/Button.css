@@ -1,0 +1,23 @@
+.form-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 440px;
+  height: 60px;
+  margin: 40px auto 24px;
+  color: var(--text-h);
+  font-size: 19px;
+  font-weight: 700;
+  background: var(--accent);
+  border: 1px solid;
+  border-radius: 50px;
+  cursor: pointer;
+  transition:
+    background-color 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover {
+    background: var(--hover);
+    box-shadow: var(--shadow);
+  }
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from './Button';
@@ -7,8 +7,14 @@ import { Input } from './Input';
 import './AuthForm.css';
 
 export default function AuthForm() {
-  const auth = useAuth();
+  const { accessToken, setAccessToken, loading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && accessToken) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [accessToken, loading, navigate]);
 
   const [userData, setUserData] = useState({
     email: '',
@@ -39,7 +45,7 @@ export default function AuthForm() {
     if (res.ok) {
       const data = await res.json();
 
-      auth.setAccessToken(data.accessToken);
+      setAccessToken(data.accessToken);
 
       navigate('/dashboard');
     }
@@ -47,7 +53,7 @@ export default function AuthForm() {
 
   return (
     <>
-      <div className='container'>
+      <div className='auth-card'>
         <Header title='Log In' />
         <form className='login-inputs' onSubmit={handleSubmit}>
           <Input
@@ -72,7 +78,7 @@ export default function AuthForm() {
                 Sign Up
               </Link>
             </div>
-            <Button className='login' text='Log In' />
+            <Button text='Log In' />
           </div>
         </form>
       </div>

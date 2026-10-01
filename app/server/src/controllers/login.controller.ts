@@ -41,20 +41,20 @@ export const login = async (
     const refreshToken = jwt.sign(
       { userId: user.id, email: user.email },
       jwtConfig.refreshSecret!,
-      { expiresIn: '10d' },
+      { expiresIn: `${jwtConfig.refreshTTL}d` },
     );
 
     const accessToken = jwt.sign(
       { userId: user.id, email: user.email },
       jwtConfig.accessSecret!,
-      { expiresIn: '15min' },
+      { expiresIn: `${jwtConfig.accessTTL}m` },
     );
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 10 * 24 * 60 * 60 * 1000,
+      maxAge: Number(jwtConfig.refreshTTL) * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({

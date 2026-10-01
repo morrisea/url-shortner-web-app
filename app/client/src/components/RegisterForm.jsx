@@ -139,9 +139,9 @@ export default function RegisterForm() {
 
   return (
     <>
-      <div className='container'>
+      <div className='register-card'>
         <Header title='Sign Up' />
-        <form className='inputs' onSubmit={handleSubmit}>
+        <form className='reg-inputs' onSubmit={handleSubmit}>
           <div className='name'>
             <RegisterInput
               type='text'
@@ -213,7 +213,7 @@ export default function RegisterForm() {
             valueAgain={userData.confirmPassword}
           />
           <div>
-            <Button className='submit' />
+            <Button />
           </div>
         </form>
       </div>

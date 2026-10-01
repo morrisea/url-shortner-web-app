@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useLocation, Outlet } from 'react-router-dom';
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+export function AuthProvider() {
   const [accessToken, setAccessToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +55,7 @@ export function AuthProvider({ children }) {
         logout,
       }}
     >
-      {children}
+      <Outlet />
     </AuthContext.Provider>
   );
 }
