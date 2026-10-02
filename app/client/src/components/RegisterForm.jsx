@@ -17,7 +17,7 @@ function RegisterInput({
   autoComplete,
 }) {
   return (
-    <div className={`reg-input ${error ? 'input-error' : ''}`}>
+    <div className={`reg-input ${error ? 'reg-input-error' : ''}`}>
       <svg role='presentation' aria-hidden='true'>
         {svg && <use href={svg}></use>}
       </svg>

@@ -4,7 +4,7 @@ import { LoginRequestBody, LoginResponseBody } from '../types/auth.types.js';
 import { eq } from 'drizzle-orm';
 import { db } from '../database/mysql.database.js';
 import { users } from '../database/schema.js';
-import { compare } from '../utils/hash.bcrypt.js';
+import { compare } from '../utils/bcrypt.helper.js';
 
 import jwt from 'jsonwebtoken';
 import { jwtConfig } from '../config/jwt.conf.js';

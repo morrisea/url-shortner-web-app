@@ -24,7 +24,7 @@ export const refreshToken = (req: Request, res: Response) => {
       },
       jwtConfig.accessSecret!,
       {
-        expiresIn: '15m',
+        expiresIn: `${jwtConfig.accessTTL}m`,
       },
     );
 

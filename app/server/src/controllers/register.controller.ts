@@ -6,7 +6,7 @@ import {
 import { eq } from 'drizzle-orm';
 import { users } from '../database/schema.js';
 import { db } from '../database/mysql.database.js';
-import { hash } from '../utils/hash.bcrypt.js';
+import { hash } from '../utils/bcrypt.helper.js';
 
 export const register = async (
   req: Request<{}, {}, RegisterRequestBody>,
