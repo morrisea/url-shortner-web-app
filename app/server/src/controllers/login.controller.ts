@@ -38,6 +38,13 @@ export const login = async (
       });
     }
 
+    if (!user.isEmailVerified) {
+      return res.status(403).json({
+        message: 'User email is not validated',
+        email: user.email,
+      });
+    }
+
     const refreshToken = jwt.sign(
       { userId: user.id, email: user.email },
       jwtConfig.refreshSecret!,

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header } from './Header';
 import { Button } from './Button';
+import { useNavigate } from 'react-router-dom';
 import PasswordCheckList from 'react-password-checklist';
 import './RegisterForm.css';
 
@@ -46,6 +47,7 @@ export default function RegisterForm() {
   });
 
   const [errors, setFormErrors] = useState({});
+  const navigate = useNavigate();
 
   const isValidPassword = (password) => {
     return (
@@ -153,12 +155,18 @@ export default function RegisterForm() {
       body: JSON.stringify(userData),
     });
 
-    const data = await res.json();
+    if (res.ok) {
+      const data = await res.json();
+
+      navigate('/verify-email', {
+        state: { email: data.email },
+      });
+    }
   };
 
   return (
     <>
-      <div className='register-card'>
+      <div className='main-card'>
         <Header title='Sign Up' />
         <form className='reg-inputs' onSubmit={handleSubmit} noValidate>
           <div className='name'>

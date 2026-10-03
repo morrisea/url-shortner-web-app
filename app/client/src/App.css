@@ -11,3 +11,13 @@
     gap: 18px;
   }
 }
+
+.main-card {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  margin: 150px auto 0;
+  padding-bottom: 30px;
+  background: var(--card-bg);
+  border-radius: 2px;
+}

@@ -11,12 +11,12 @@ export default function NavBar({ title, svg }) {
     {
       name: 'Register',
       path: '/register',
-      includeOn: ['/', '/register', '/login'],
+      includeOn: ['/', '/register', '/login', '/verify-email'],
     },
     {
       name: 'Log In',
       path: '/login',
-      includeOn: ['/', '/register', '/login'],
+      includeOn: ['/', '/register', '/login', '/verify-email'],
     },
     {
       name: 'Dashboard',

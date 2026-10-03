@@ -6,6 +6,7 @@ import App from './App';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import VerifyEmail from './pages/VerifyEmail';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import './index.css';
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { path: '/', element: <App /> },
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
+      { path: '/verify-email', element: <VerifyEmail /> },
 
       {
         element: <ProtectedRoute />,

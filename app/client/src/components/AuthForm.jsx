@@ -45,12 +45,16 @@ export default function AuthForm() {
       credentials: 'include',
     });
 
-    if (res.ok) {
-      const data = await res.json();
+    const data = await res.json();
 
+    if (res.ok) {
       setAccessToken(data.accessToken);
 
       navigate('/dashboard');
+    } else if (res.status == 403) {
+      navigate('/verify-email', {
+        state: { email: data.email },
+      });
     } else {
       setErrors({ message: 'Invalid email or password' });
     }
@@ -58,7 +62,7 @@ export default function AuthForm() {
 
   return (
     <>
-      <div className='auth-card'>
+      <div className='main-card'>
         <Header title='Log In' />
         <form className='login-inputs' onSubmit={handleSubmit} noValidate>
           <Input

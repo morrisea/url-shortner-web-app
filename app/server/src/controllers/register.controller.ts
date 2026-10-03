@@ -7,6 +7,9 @@ import { eq } from 'drizzle-orm';
 import { users } from '../database/schema.js';
 import { db } from '../database/mysql.database.js';
 import { hash } from '../utils/bcrypt.helper.js';
+import { sendEmail, genValidationToken } from '../utils/nodemailer.helper.js';
+import { Email } from '../types/email.types.js';
+import { smtpConfig } from '../config/smtp.conf.js';
 
 export const register = async (
   req: Request<{}, {}, RegisterRequestBody>,
@@ -59,21 +62,30 @@ export const register = async (
 
     const passwordHash = await hash(password);
 
+    const token = genValidationToken(email);
+    const body = `${smtpConfig.api}/verify-email/?token=${token}`;
+    const valEmail: Email = {
+      receiver: email,
+      subject: 'ShortURL Email Verification Code',
+      body: body,
+    };
+
+    await sendEmail(valEmail);
     await db.insert(users).values({
       firstName: firstName.toLowerCase(),
       lastName: lastName.toLowerCase(),
       email: email,
       passwordHash: passwordHash,
-      isEmailVerified: true,
+      isEmailVerified: false,
+    });
+
+    return res.status(201).json({
+      message: 'Registration successful',
+      email: email,
     });
   } catch (err: any) {
     return res.status(500).json({
       message: err.message,
-      data: null,
     });
   }
-
-  return res.status(201).json({
-    message: 'Registration successful',
-  });
 };

@@ -5,6 +5,7 @@ services:
     ports:
       - '${SERVER_PORT}:3000'
     environment:
+      API_URL: ${API_URL}
       NODE_ENV: ${NODE_ENV}
       DB_HOST: database
       DB_PORT: 3306
@@ -16,6 +17,10 @@ services:
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       JWT_ACCESS_TTL: ${JWT_ACCESS_TTL}
       JWT_REFRESH_TTL: ${JWT_REFRESH_TTL}
+      SMTP_EMAIL: ${SMTP_EMAIL}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_VALIDATION_SECRET: ${SMTP_VALIDATION_SECRET}
+      SMTP_VALIDATION_TTL: ${SMTP_VALIDATION_TTL}
     depends_on:
       - database
     volumes:

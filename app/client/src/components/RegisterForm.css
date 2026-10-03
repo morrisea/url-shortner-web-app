@@ -1,13 +1,3 @@
-.register-card {
-  display: flex;
-  flex-direction: column;
-  margin: 200px auto 0;
-  width: 600px;
-  background: var(--card-bg);
-  padding-bottom: 30px;
-  border-radius: 2px;
-}
-
 .reg-inputs {
   display: flex;
   flex-direction: column;

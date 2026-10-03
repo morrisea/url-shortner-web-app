@@ -1,8 +1,13 @@
 import './Button.css';
 
-export function Button({ text = 'Submit', className = 'form-button' }) {
+export function Button({
+  text = 'Submit',
+  type = 'submit',
+  className = 'form-button',
+  onClick,
+}) {
   return (
-    <button className={className} type='submit'>
+    <button className={className} type={type} onClick={onClick}>
       {text}
     </button>
   );
