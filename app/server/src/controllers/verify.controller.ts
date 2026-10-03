@@ -20,7 +20,6 @@ export const verify = async (
 
   try {
     const decrypted = jwt.verify(token, smtpConfig.validationSecret!);
-    console.log(token);
 
     if (typeof decrypted === 'string' || !decrypted.email) {
       return res.status(401).json({
