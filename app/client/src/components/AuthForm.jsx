@@ -54,6 +54,7 @@ export default function AuthForm() {
     } else if (res.status == 403) {
       navigate('/verify-email', {
         state: { email: data.email },
+        replace: true,
       });
     } else {
       setErrors({ message: 'Invalid email or password' });

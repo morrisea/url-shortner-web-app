@@ -160,6 +160,7 @@ export default function RegisterForm() {
 
       navigate('/verify-email', {
         state: { email: data.email },
+        replace: true,
       });
     }
   };
