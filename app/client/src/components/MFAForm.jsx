@@ -64,7 +64,7 @@ export default function MFAForm() {
     if (res.ok) {
       setAccessToken(data.accessToken);
 
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } else if (res.status == 403) {
       navigate('/verify-email', {
         state: { email: data.email },

@@ -33,5 +33,5 @@
   width: 480px;
   min-height: 20px;
   color: var(--error);
-  font-size: 14px;
+  font-size: 0.875rem;
 }

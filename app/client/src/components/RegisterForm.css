@@ -29,7 +29,7 @@
   flex: 1;
   height: 50px;
   color: var(--border);
-  font-size: 19px;
+  font-size: 1.2rem;
   background: transparent;
   border: none;
   outline: none;
@@ -73,5 +73,5 @@
   min-height: 20px;
   margin: -20px auto -55px;
   color: var(--error);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
