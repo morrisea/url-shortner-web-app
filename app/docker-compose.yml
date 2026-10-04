@@ -21,6 +21,8 @@ services:
       SMTP_PASS: ${SMTP_PASS}
       SMTP_VALIDATION_SECRET: ${SMTP_VALIDATION_SECRET}
       SMTP_VALIDATION_TTL: ${SMTP_VALIDATION_TTL}
+      MFA_TTL: ${MFA_TTL}
+      FRONTEND_URL: ${FRONTEND_URL}
     depends_on:
       - database
     volumes:

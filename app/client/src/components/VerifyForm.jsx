@@ -11,7 +11,7 @@ export default function VerifyForm() {
 
   useEffect(() => {
     if (!email) {
-      navigate('/login');
+      navigate('/login', { replace: true });
     }
   }, [email, navigate]);
 

@@ -3,11 +3,12 @@ import { LoginRequestBody, LoginResponseBody } from '../types/auth.types.js';
 
 import { eq } from 'drizzle-orm';
 import { db } from '../database/mysql.database.js';
-import { users } from '../database/schema.js';
+import { users, multiFactor } from '../database/schema.js';
 import { compare } from '../utils/bcrypt.helper.js';
 
-import jwt from 'jsonwebtoken';
-import { jwtConfig } from '../config/jwt.conf.js';
+import { generateCode } from '../utils/crypto.helper.js';
+import { sendEmail } from '../utils/nodemailer.helper.js';
+import { mfaConfig } from '../config/mfa.conf.js';
 
 export const login = async (
   req: Request<{}, {}, LoginRequestBody>,
@@ -45,28 +46,24 @@ export const login = async (
       });
     }
 
-    const refreshToken = jwt.sign(
-      { userId: user.id, email: user.email },
-      jwtConfig.refreshSecret!,
-      { expiresIn: `${jwtConfig.refreshTTL}d` },
-    );
+    const code = generateCode();
 
-    const accessToken = jwt.sign(
-      { userId: user.id, email: user.email },
-      jwtConfig.accessSecret!,
-      { expiresIn: `${jwtConfig.accessTTL}m` },
-    );
+    await db.delete(multiFactor).where(eq(multiFactor.email, email));
 
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: Number(jwtConfig.refreshTTL) * 24 * 60 * 60 * 1000,
+    await db.insert(multiFactor).values({
+      email: user.email,
+      code,
+      expiresAt: new Date(Date.now() + mfaConfig.codeTTL * 60 * 1000),
+    });
+
+    await sendEmail({
+      receiver: user.email,
+      subject: 'ShortURL MFA Code',
+      body: code,
     });
 
     return res.status(200).json({
-      message: 'User authenticated',
-      accessToken,
+      message: 'MFA required',
     });
   } catch (err: any) {
     return res.status(500).json({

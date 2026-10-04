@@ -7,7 +7,7 @@ import { Input } from './Input';
 import './AuthForm.css';
 
 export default function AuthForm() {
-  const { accessToken, setAccessToken, loading } = useAuth();
+  const { accessToken, loading } = useAuth();
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     email: '',
@@ -48,9 +48,10 @@ export default function AuthForm() {
     const data = await res.json();
 
     if (res.ok) {
-      setAccessToken(data.accessToken);
-
-      navigate('/dashboard');
+      navigate('/verify-mfa', {
+        state: { email: userData.email },
+        replace: true,
+      });
     } else if (res.status == 403) {
       navigate('/verify-email', {
         state: { email: data.email },

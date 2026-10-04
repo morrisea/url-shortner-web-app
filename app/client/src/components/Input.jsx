@@ -1,6 +1,6 @@
 import './Input.css';
 
-export function Input({ type, name, value, svg, onChange }) {
+export function Input({ type, name, value, svg, onChange, disabled }) {
   return (
     <>
       <div className='input'>
@@ -15,6 +15,7 @@ export function Input({ type, name, value, svg, onChange }) {
           value={value}
           onChange={onChange}
           required
+          disabled={disabled}
         />
       </div>
     </>

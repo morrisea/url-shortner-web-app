@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 
 import App from './App';
 import Login from './pages/Login';
@@ -8,7 +9,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import VerifyEmail from './pages/VerifyEmail';
 import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './context/AuthContext';
+import MultiFactor from './pages/MultiFactor';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
       { path: '/verify-email', element: <VerifyEmail /> },
-
+      { path: '/verify-mfa', element: <MultiFactor /> },
       {
         element: <ProtectedRoute />,
         children: [{ path: '/dashboard', element: <Dashboard /> }],

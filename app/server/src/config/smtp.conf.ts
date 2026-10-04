@@ -4,4 +4,5 @@ export const smtpConfig = {
   validationSecret: process.env.SMTP_VALIDATION_SECRET,
   validationTTL: Number(process.env.SMTP_VALIDATION_TTL),
   api: process.env.API_URL,
+  url: process.env.FRONTEND_URL,
 };

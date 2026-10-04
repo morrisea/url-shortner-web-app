@@ -8,7 +8,6 @@ import { users } from '../database/schema.js';
 import { db } from '../database/mysql.database.js';
 import { hash } from '../utils/bcrypt.helper.js';
 import { sendEmail, genValidationToken } from '../utils/nodemailer.helper.js';
-import { Email } from '../types/email.types.js';
 import { smtpConfig } from '../config/smtp.conf.js';
 
 export const register = async (
@@ -64,13 +63,13 @@ export const register = async (
 
     const token = genValidationToken(email);
     const body = `${smtpConfig.api}/verify-email/?token=${token}`;
-    const valEmail: Email = {
+
+    await sendEmail({
       receiver: email,
       subject: 'ShortURL Email Verification Code',
       body: body,
-    };
+    });
 
-    await sendEmail(valEmail);
     await db.insert(users).values({
       firstName: firstName.toLowerCase(),
       lastName: lastName.toLowerCase(),

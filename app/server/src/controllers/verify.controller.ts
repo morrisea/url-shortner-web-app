@@ -44,7 +44,7 @@ export const verify = async (
       })
       .where(eq(users.email, email));
 
-    return res.redirect('http://localhost:5173/login');
+    return res.redirect(`${smtpConfig.url}/login`);
   } catch (err: any) {
     return res.status(500).json({
       message: err.message,
