@@ -1,1 +1,0 @@
-RENAME TABLE `two_factor` TO `multi_factor`;
