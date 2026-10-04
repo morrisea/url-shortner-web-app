@@ -79,6 +79,9 @@ export default function MFAForm() {
     <>
       <div className='main-card'>
         <Header title='MFA' />
+        <div className='mfa-text'>
+          <p>MFA code sent to {email}.</p>
+        </div>
         <form className='mfa-inputs' onSubmit={handleSubmit} noValidate>
           <Input
             type='email'
