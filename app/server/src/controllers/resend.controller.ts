@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { eq } from 'drizzle-orm';
 import { users } from '../database/schema.js';
 import { db } from '../database/mysql.database.js';
-import { sendEmail, genValidationToken } from '../utils/nodemailer.helper.js';
+import { sendEmail, signEmail } from '../utils/nodemailer.helper.js';
 import { smtpConfig } from '../config/smtp.conf.js';
 
 export const resend = async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export const resend = async (req: Request, res: Response) => {
       });
     }
 
-    const token = genValidationToken(email);
+    const token = signEmail(email);
     const body = `${smtpConfig.api}/verify-email/?token=${token}`;
 
     await sendEmail({

@@ -21,3 +21,12 @@ export interface LoginResponseBody {
   accessToken?: string;
   email?: string;
 }
+
+export interface AuthToken {
+  id: number;
+  email: string;
+  first: string;
+  last: string;
+  iat?: number;
+  exp?: number;
+}

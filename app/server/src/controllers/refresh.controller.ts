@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { jwtConfig } from '../config/jwt.conf.js';
+import { sign, verify } from '../utils/jwt.helper.js';
+import { AuthToken } from '../types/auth.types.js';
 
 export const refreshToken = (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
@@ -12,21 +12,8 @@ export const refreshToken = (req: Request, res: Response) => {
   }
 
   try {
-    const refreshDecrypt = jwt.verify(
-      refreshToken,
-      jwtConfig.refreshSecret!,
-    ) as jwt.JwtPayload;
-
-    const newAccessToken = jwt.sign(
-      {
-        userId: refreshDecrypt.userId,
-        email: refreshDecrypt.email,
-      },
-      jwtConfig.accessSecret!,
-      {
-        expiresIn: `${jwtConfig.accessTTL}m`,
-      },
-    );
+    const user = verify(refreshToken, 'refresh') as AuthToken;
+    const newAccessToken = sign(user, 'access');
 
     return res.status(200).json({
       token: newAccessToken,

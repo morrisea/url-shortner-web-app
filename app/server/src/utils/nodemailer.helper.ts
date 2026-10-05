@@ -27,7 +27,7 @@ export async function sendEmail(email: Email) {
   console.log('Message sent: %s', info.messageId);
 }
 
-export function genValidationToken(email: string): string {
+export function signEmail(email: string): string {
   return jwt.sign(
     {
       email: email,
@@ -37,4 +37,8 @@ export function genValidationToken(email: string): string {
       expiresIn: `${smtpConfig.validationTTL}m`,
     },
   );
+}
+
+export function verifyEmail(token: string) {
+  return jwt.verify(token, smtpConfig.validationSecret!);
 }

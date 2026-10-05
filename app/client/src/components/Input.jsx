@@ -27,7 +27,6 @@ export function Input({
             onChange={onChange}
             required
             disabled={disabled}
-            invalid={invalid}
           />
         </div>
       </div>

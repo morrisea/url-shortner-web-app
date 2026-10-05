@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { eq } from 'drizzle-orm';
 import { db } from '../database/mysql.database.js';
-import jwt from 'jsonwebtoken';
 import { smtpConfig } from '../config/smtp.conf.js';
 import { VerifyEmailParams } from '../types/email.types.js';
 import { users } from '../database/schema.js';
+import { verifyEmail } from '../utils/nodemailer.helper.js';
 
 export const verify = async (
   req: Request<{}, {}, {}, VerifyEmailParams>,
@@ -19,7 +19,7 @@ export const verify = async (
   }
 
   try {
-    const decrypted = jwt.verify(token, smtpConfig.validationSecret!);
+    const decrypted = verifyEmail(token);
 
     if (typeof decrypted === 'string' || !decrypted.email) {
       return res.status(401).json({

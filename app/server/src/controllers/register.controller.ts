@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 import { users } from '../database/schema.js';
 import { db } from '../database/mysql.database.js';
 import { hash } from '../utils/bcrypt.helper.js';
-import { sendEmail, genValidationToken } from '../utils/nodemailer.helper.js';
+import { sendEmail, signEmail } from '../utils/nodemailer.helper.js';
 import { smtpConfig } from '../config/smtp.conf.js';
 
 export const register = async (
@@ -61,7 +61,7 @@ export const register = async (
 
     const passwordHash = await hash(password);
 
-    const token = genValidationToken(email);
+    const token = signEmail(email);
     const body = `${smtpConfig.api}/verify-email/?token=${token}`;
 
     await sendEmail({

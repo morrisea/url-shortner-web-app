@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { eq, and } from 'drizzle-orm';
 import { db } from '../database/mysql.database.js';
 import { multiFactor, users } from '../database/schema.js';
-import jwt from 'jsonwebtoken';
+import { sign } from '../utils/jwt.helper.js';
 import { jwtConfig } from '../config/jwt.conf.js';
 
 export const verifyMFA = async (req: Request, res: Response) => {
@@ -25,26 +25,24 @@ export const verifyMFA = async (req: Request, res: Response) => {
     }
 
     const [user] = await db.select().from(users).where(eq(users.email, email));
+    const tokenData = {
+      id: user.id,
+      email: user.email,
+      first: user.firstName,
+      last: user.lastName,
+    };
 
     await db
       .delete(multiFactor)
       .where(and(eq(multiFactor.code, code), eq(multiFactor.email, email)));
 
-    const refreshToken = jwt.sign(
-      { userId: user.id, email: user.email },
-      jwtConfig.refreshSecret!,
-      { expiresIn: `${jwtConfig.refreshTTL}d` },
-    );
+    const refreshToken = sign(tokenData, 'refresh');
 
-    const accessToken = jwt.sign(
-      { userId: user.id, email: user.email },
-      jwtConfig.accessSecret!,
-      { expiresIn: `${jwtConfig.accessTTL}m` },
-    );
+    const accessToken = sign(tokenData, 'access');
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
       maxAge: Number(jwtConfig.refreshTTL) * 24 * 60 * 60 * 1000,
     });

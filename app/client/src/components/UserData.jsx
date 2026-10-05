@@ -48,6 +48,10 @@ export default function UserData() {
               <b>User ID:</b> {userData.user.userId}
             </p>
             <p>
+              <b>Name:</b> {userData.user.first} {userData.user.last}
+            </p>
+
+            <p>
               <b>Email:</b> {userData.user.email}
             </p>
             <p>
