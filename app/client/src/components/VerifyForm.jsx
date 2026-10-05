@@ -36,7 +36,6 @@ export default function VerifyForm() {
           <Header title='Verify Email' />
           <div className='verify-text'>
             <p>Verification email sent to {email}.</p>
-            <p>Resend email verification code.</p>
           </div>
           <Button text='Resend Code' type='button' onClick={resendCode} />
         </form>

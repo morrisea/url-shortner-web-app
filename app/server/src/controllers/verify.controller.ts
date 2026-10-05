@@ -44,7 +44,7 @@ export const verify = async (
       })
       .where(eq(users.email, email));
 
-    return res.redirect(`${smtpConfig.url}/login`);
+    return res.redirect(`${smtpConfig.url}/login?verified=true`);
   } catch (err: any) {
     return res.status(500).json({
       message: err.message,

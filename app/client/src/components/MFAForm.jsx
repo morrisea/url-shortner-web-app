@@ -17,7 +17,7 @@ export default function MFAForm() {
     code: '',
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({ login: false });
 
   useEffect(() => {
     if (!loading && accessToken) {
@@ -71,7 +71,7 @@ export default function MFAForm() {
         replace: true,
       });
     } else {
-      setErrors({ message: 'Invalid or expired MFA code' });
+      setErrors({ login: true });
     }
   };
 
@@ -97,6 +97,8 @@ export default function MFAForm() {
             svg='/icons.svg#lock-icon'
             value={userData.code}
             onChange={handleInput}
+            error={errors.login ? 'Invalid or expired code' : ''}
+            invalid={errors.login}
           />
           <div className='mfa-info'>
             <div className='resend'>
@@ -104,11 +106,6 @@ export default function MFAForm() {
               <button className='resend-link' type='button' onClick={resendMFA}>
                 Resend Code
               </button>
-            </div>
-            <div className='mfa-errors'>
-              {Object.values(errors).map((error, index) => (
-                <div key={index}>{error}</div>
-              ))}
             </div>
             <Button text='Log In' />
           </div>

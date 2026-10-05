@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from './Button';
 import { Header } from './Header';
@@ -9,18 +9,28 @@ import './AuthForm.css';
 export default function AuthForm() {
   const { accessToken, loading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [verified, setVerified] = useState(
+    searchParams.get('verified') === 'true',
+  );
   const [userData, setUserData] = useState({
     email: '',
     password: '',
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    login: false,
+  });
 
   useEffect(() => {
     if (!loading && accessToken) {
       navigate('/dashboard', { replace: true });
     }
-  }, [accessToken, loading, navigate]);
+
+    if (verified) {
+      setSearchParams({}, { replace: true });
+    }
+  }, [accessToken, loading, navigate, verified, setSearchParams]);
 
   const handleInput = (event) => {
     setUserData({
@@ -58,7 +68,7 @@ export default function AuthForm() {
         replace: true,
       });
     } else {
-      setErrors({ message: 'Invalid email or password' });
+      setErrors({ login: true });
     }
   };
 
@@ -73,6 +83,8 @@ export default function AuthForm() {
             svg='/icons.svg#email-icon'
             value={userData.email}
             onChange={handleInput}
+            error={errors.login ? 'Invalid email or password' : ''}
+            invalid={errors.login}
           />
 
           <Input
@@ -81,6 +93,7 @@ export default function AuthForm() {
             svg='/icons.svg#lock-icon'
             value={userData.password}
             onChange={handleInput}
+            invalid={errors.login}
           />
           <div className='login-info'>
             <div className='register'>
@@ -89,11 +102,11 @@ export default function AuthForm() {
                 Sign Up
               </Link>
             </div>
-            <div className='login-errors'>
-              {Object.values(errors).map((error, index) => (
-                <div key={index}>{error}</div>
-              ))}
-            </div>
+            {verified && (
+              <div className='verified-message'>
+                Email verified successfully. You can now log in.
+              </div>
+            )}
             <Button text='Log In' />
           </div>
         </form>

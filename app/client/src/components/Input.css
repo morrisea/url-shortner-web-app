@@ -33,3 +33,23 @@
   border: none;
   outline: none;
 }
+
+.input-group {
+  position: relative;
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-error {
+  outline-color: var(--error) !important;
+}
+
+.input-error-message {
+  position: absolute;
+  bottom: 100%;
+  left: 15px;
+  color: var(--error);
+  font-size: 0.875rem;
+}

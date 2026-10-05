@@ -16,23 +16,29 @@ function RegisterInput({
   minLength,
   maxLength,
   autoComplete,
+  onPaste,
 }) {
   return (
-    <div className={`reg-input ${error ? 'reg-input-error' : ''}`}>
-      <svg role='presentation' aria-hidden='true'>
-        {svg && <use href={svg}></use>}
-      </svg>
+    <div className='reg-input-group'>
+      {error && <div className='reg-input-error-message'>{error}</div>}
 
-      <input
-        placeholder={placeholder}
-        name={name}
-        type={type}
-        value={value}
-        onChange={onChange}
-        minLength={minLength}
-        maxLength={maxLength}
-        autoComplete={autoComplete}
-      />
+      <div className={`reg-input ${error ? 'reg-input-error' : ''}`}>
+        <svg role='presentation' aria-hidden='true'>
+          {svg && <use href={svg}></use>}
+        </svg>
+
+        <input
+          placeholder={placeholder}
+          name={name}
+          type={type}
+          value={value}
+          onChange={onChange}
+          minLength={minLength}
+          maxLength={maxLength}
+          autoComplete={autoComplete}
+          onPaste={onPaste}
+        />
+      </div>
     </div>
   );
 }
@@ -110,38 +116,31 @@ export default function RegisterForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const isError = {};
     const errorMessages = {};
 
     if (!userData.firstName) {
-      isError.firstName = true;
-      errorMessages.firstName = 'Invalid first Name';
+      errorMessages.firstName = 'Invalid first name';
     }
 
     if (!userData.lastName) {
-      isError.lastName = true;
       errorMessages.lastName = 'Invalid last name';
     }
 
     if (!userData.email || !isValidEmail(userData.email)) {
-      isError.email = true;
       errorMessages.email = 'Invalid email';
     }
 
     if (!isValidPassword(userData.password)) {
-      isError.password = true;
       errorMessages.password = 'Password does not meet requirements';
     }
 
     if (userData.password !== userData.confirmPassword) {
-      isError.confirmPassword = true;
       errorMessages.confirmPassword = 'Passwords do not match';
     }
 
-    setFormErrors(isError);
     setFormErrors(errorMessages);
 
-    if (Object.keys(isError).length > 0) {
+    if (Object.keys(errorMessages).length > 0) {
       return;
     }
 
@@ -155,14 +154,29 @@ export default function RegisterForm() {
       body: JSON.stringify(userData),
     });
 
-    if (res.ok) {
-      const data = await res.json();
+    if (res.status === 409) {
+      setFormErrors((prev) => ({
+        ...prev,
+        email: 'Email already in use',
+      }));
 
-      navigate('/verify-email', {
-        state: { email: data.email },
-        replace: true,
-      });
+      return;
     }
+
+    if (!res.ok) {
+      setFormErrors({
+        email: 'Registration failed',
+      });
+
+      return;
+    }
+
+    const data = await res.json();
+
+    navigate('/verify-email', {
+      state: { email: data.email },
+      replace: true,
+    });
   };
 
   return (
@@ -232,6 +246,9 @@ export default function RegisterForm() {
             maxLength={32}
             error={errors.confirmPassword}
             autoComplete='off'
+            onPaste={(event) => {
+              event.preventDefault();
+            }}
           />
 
           <PasswordCheckList
@@ -240,12 +257,6 @@ export default function RegisterForm() {
             value={userData.password}
             valueAgain={userData.confirmPassword}
           />
-          <div className='form-errors'>
-            {Object.values(errors).map((error, index) => (
-              <div key={index}>{error}</div>
-            ))}
-          </div>
-
           <div>
             <Button />
           </div>

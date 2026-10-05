@@ -57,21 +57,31 @@
 .name {
   display: flex;
   flex-direction: row;
-  width: 480px;
   gap: 20px;
 }
 
 .name .reg-input {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
-.form-errors {
+.reg-input-group {
+  position: relative;
+  width: 480px;
   display: flex;
   flex-direction: column;
-  width: 480px;
-  min-height: 20px;
-  margin: -20px auto -55px;
+  gap: 5px;
+}
+
+.name .reg-input-group {
+  flex: 1;
+  min-width: 0;
+  width: 230px;
+}
+
+.reg-input-error-message {
+  position: absolute;
+  bottom: 100%;
+  left: 15px;
   color: var(--error);
   font-size: 0.875rem;
 }
