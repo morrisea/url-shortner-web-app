@@ -8,11 +8,12 @@ import {
 
 export const users = mysqlTable('users', {
   id: int('id').primaryKey().autoincrement(),
-  firstName: varchar('firstName', { length: 255 }).notNull(),
-  lastName: varchar('lastName', { length: 255 }).notNull(),
+  firstName: varchar('first_name', { length: 255 }).notNull(),
+  lastName: varchar('last_name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
-  passwordHash: varchar('passwordHash', { length: 255 }).notNull(),
-  isEmailVerified: boolean('isEmailVerified').default(false).notNull(),
+  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+  isEmailVerified: boolean('is_email_verified').default(false).notNull(),
+  creationDate: timestamp('creation_date').notNull().defaultNow(),
 });
 
 export const multiFactor = mysqlTable('multi_factor', {

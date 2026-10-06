@@ -9,10 +9,11 @@ CREATE TABLE `multi_factor` (
 --> statement-breakpoint
 CREATE TABLE `users` (
 	`id` int AUTO_INCREMENT PRIMARY KEY,
-	`firstName` varchar(255) NOT NULL,
-	`lastName` varchar(255) NOT NULL,
+	`first_name` varchar(255) NOT NULL,
+	`last_name` varchar(255) NOT NULL,
 	`email` varchar(255) NOT NULL,
-	`passwordHash` varchar(255) NOT NULL,
-	`isEmailVerified` boolean NOT NULL DEFAULT false,
+	`password_hash` varchar(255) NOT NULL,
+	`is_email_verified` boolean NOT NULL DEFAULT false,
+	`creation_date` timestamp NOT NULL DEFAULT (now()),
 	CONSTRAINT `email_unique` UNIQUE INDEX(`email`)
 );
