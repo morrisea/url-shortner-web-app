@@ -5,7 +5,7 @@ import { AuthToken } from '../types/auth.types.js';
 export const sign = (user: AuthToken, type: string) => {
   return jwt.sign(
     {
-      userId: user.id,
+      id: user.id,
       email: user.email,
       first: user.first,
       last: user.last,

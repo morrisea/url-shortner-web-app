@@ -8,9 +8,5 @@ export default function ProtectedRoute() {
     return null;
   }
 
-  if (!accessToken) {
-    return <Navigate to='/login' replace />;
-  }
-
-  return <Outlet />;
+  return accessToken ? <Outlet /> : <Navigate to='/login' replace />;
 }
