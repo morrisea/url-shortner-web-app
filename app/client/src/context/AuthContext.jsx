@@ -12,17 +12,17 @@ export function AuthProvider() {
   useEffect(() => {
     const refreshAccessToken = async () => {
       try {
-        const response = await fetch(`${apiUrl}/refresh`, {
+        const res = await fetch(`${apiUrl}/refresh`, {
           method: 'POST',
           credentials: 'include',
         });
 
-        if (!response.ok) {
+        if (!res.ok) {
           setAccessToken(null);
           return;
         }
 
-        const data = await response.json();
+        const data = await res.json();
 
         setAccessToken(data.token);
       } catch {

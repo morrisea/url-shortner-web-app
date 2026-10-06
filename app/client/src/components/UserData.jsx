@@ -36,13 +36,6 @@ export default function UserData() {
     }
   }, [accessToken]);
 
-  const remainingSeconds = userData
-    ? userData.user.exp - Math.floor(Date.now() / 1000)
-    : 0;
-
-  const minutes = Math.floor(remainingSeconds / 60);
-  const seconds = remainingSeconds % 60;
-
   return (
     <>
       <div className='user-card'>
@@ -59,9 +52,6 @@ export default function UserData() {
 
             <p>
               <b>Email:</b> {userData.user.email}
-            </p>
-            <p>
-              <b>Token TTL:</b> {minutes}m {seconds}s
             </p>
           </div>
         )}
