@@ -11,8 +11,7 @@ The project will consist of a web application that allows users to create shorte
 
 The primary purpose of the application is to make long and difficult-to-share URLs shorter and easier to distribute while giving users a centralized location to manage their links.
 
-Milestone One includes the following: application setup, registration, email verification, login, email-
-based two-factor authentication, protected access, and logout. Project-specific features will be added in future milestones.
+Milestone One includes the following: application setup, registration, email verification, login, email-based two-factor authentication, protected access, and logout. Project-specific features will be added in future milestones.
 
 ## Technologies Used
 
