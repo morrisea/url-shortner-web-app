@@ -11,6 +11,9 @@ The project will consist of a web application that allows users to create shorte
 
 The primary purpose of the application is to make long and difficult-to-share URLs shorter and easier to distribute while giving users a centralized location to manage their links.
 
+Milestone One includes the following: application setup, registration, email verification, login, email-
+based two-factor authentication, protected access, and logout. Project-specific features will be added in future milestones.
+
 ## Technologies Used
 
 | Category           | Technologies                         |
@@ -84,6 +87,8 @@ ADMINER_PORT=
 
 ### Build and Start the Containers
 
+Docker compose will handle running the `npm run dev` comands to bring up each service. Run the following command to build the images and start the services.
+
 ```bash
 docker compose up --build
 ```
@@ -95,6 +100,31 @@ Apply the Drizzle ORM migrations:
 ```bash
 docker compose exec server npx drizzle-kit migrate
 ```
+
+### Schema
+
+The `users` table stores account information for registered users. It contains the user's personal identifying information, password hash, email verification status, and account creation timestamp.
+
+| Field               | Type           | Constraints                 | Purpose                                              |
+| ------------------- | -------------- | --------------------------- | ---------------------------------------------------- |
+| `id`                | `INT`          | Primary Key, Auto Increment | Unique identifier for each user                      |
+| `first_name`        | `VARCHAR(255)` | Not Null                    | User's first name                                    |
+| `last_name`         | `VARCHAR(255)` | Not Null                    | User's last name                                     |
+| `email`             | `VARCHAR(255)` | Not Null, Unique            | User's email address                                 |
+| `password_hash`     | `VARCHAR(255)` | Not Null                    | Stores the user's bcrypt-hashed password             |
+| `is_email_verified` | `BOOLEAN`      | Not Null, Default `false`   | Indicates whether the user's email has been verified |
+| `creation_date`     | `TIMESTAMP`    | Not Null, Default `NOW()`   | Records when the account was created                 |
+
+### Multi-Factor Authentication Table
+
+The `multi_factor` table temporarily stores email-based multi-factor authentication codes and their expiration times.
+
+| Field        | Type           | Constraints                 | Purpose                                      |
+| ------------ | -------------- | --------------------------- | -------------------------------------------- |
+| `id`         | `INT`          | Primary Key, Auto Increment | Unique identifier for each MFA record        |
+| `code`       | `VARCHAR(8)`   | Not Null, Unique            | Temporary MFA verification code              |
+| `email`      | `VARCHAR(255)` | Not Null, Unique            | Email address associated with the MFA code   |
+| `expires_at` | `TIMESTAMP`    | Not Null                    | Determines when the MFA code becomes invalid |
 
 ## Authentication Workflow
 
@@ -191,3 +221,4 @@ The backend provides the following endpoints:
 - npmjs - package documentation, <https://www.npmjs.com/package/>
 - ChatGPT - error parsing, <https://chatgpt.com/>
 - JWTs - jsonwebtoken, <https://github.com/auth0/node-jsonwebtoken>
+- drizzle - Documentation, <https://orm.drizzle.team/docs/overview>
