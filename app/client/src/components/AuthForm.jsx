@@ -80,6 +80,7 @@ export default function AuthForm() {
           <Input
             type='email'
             name='email'
+            placeholder='Email'
             svg='/icons.svg#email-icon'
             value={userData.email}
             onChange={handleInput}
@@ -90,6 +91,7 @@ export default function AuthForm() {
           <Input
             type='password'
             name='password'
+            placeholder='Password'
             svg='/icons.svg#lock-icon'
             value={userData.password}
             onChange={handleInput}

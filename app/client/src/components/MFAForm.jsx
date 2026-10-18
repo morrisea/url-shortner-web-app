@@ -86,6 +86,7 @@ export default function MFAForm() {
           <Input
             type='email'
             name='email'
+            placeholder='Email'
             svg='/icons.svg#email-icon'
             value={email}
             disabled
@@ -94,6 +95,7 @@ export default function MFAForm() {
           <Input
             type='text'
             name='code'
+            placeholder='Code'
             svg='/icons.svg#lock-icon'
             value={userData.code}
             onChange={handleInput}

@@ -9,6 +9,7 @@ export function Input({
   disabled,
   error,
   invalid,
+  placeholder,
 }) {
   return (
     <>
@@ -20,7 +21,7 @@ export function Input({
           </svg>
 
           <input
-            placeholder={name.charAt(0).toUpperCase() + name.slice(1)}
+            placeholder={placeholder}
             name={name}
             type={type}
             value={value}
