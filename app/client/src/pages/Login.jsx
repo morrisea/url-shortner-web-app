@@ -1,11 +1,9 @@
-import AuthForm from '../components/AuthForm'
-import NavBar from '../components/NavBar'
+import AuthForm from '../components/AuthForm';
 
 export default function Login() {
-    return (
-        <>
-            <NavBar title="Short" svg="/icons.svg#url-icon" />
-            <AuthForm />
-        </>
-    );
+  return (
+    <>
+      <AuthForm />
+    </>
+  );
 }

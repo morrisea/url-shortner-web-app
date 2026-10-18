@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import App from './App';
+import Layout from './layouts/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -16,14 +17,19 @@ const router = createBrowserRouter([
   {
     element: <AuthProvider />,
     children: [
-      { path: '/', element: <App /> },
-      { path: '/login', element: <Login /> },
-      { path: '/register', element: <Register /> },
-      { path: '/verify-email', element: <VerifyEmail /> },
-      { path: '/verify-mfa', element: <MultiFactor /> },
       {
-        element: <ProtectedRoute />,
-        children: [{ path: '/dashboard', element: <Dashboard /> }],
+        element: <Layout />,
+        children: [
+          { path: '/', element: <App /> },
+          { path: '/login', element: <Login /> },
+          { path: '/register', element: <Register /> },
+          { path: '/verify-email', element: <VerifyEmail /> },
+          { path: '/verify-mfa', element: <MultiFactor /> },
+          {
+            element: <ProtectedRoute />,
+            children: [{ path: '/dashboard', element: <Dashboard /> }],
+          },
+        ],
       },
     ],
   },

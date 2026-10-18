@@ -64,46 +64,42 @@ export default function App() {
 
   return (
     <>
-      <div id='app-bg'>
-        <NavBar title='Short' svg='/icons.svg#url-icon' />
+      <main id='center'>
+        <div className='info'>
+          <section className='descript-card'>
+            <h1>Short URL</h1>
+            <br></br>
+            <p>
+              Welcome to the best link shortener — Shorten long URLs into clean,
+              shareable links with just a few clicks.
+            </p>
+            <br></br>
+            <p>
+              You can easily manage your links and make sharing across platforms
+              simple and convenient.
+            </p>
+          </section>
+          <section className='shortener-card'>
+            <h2>Shorten a Link</h2>
+            <form
+              className='shortener-inputs'
+              onSubmit={handleSubmit}
+              noValidate
+            >
+              <Input
+                type='text'
+                name='link'
+                svg='/icons.svg#link-icon'
+                value={linkData.link}
+                onChange={handleInput}
+                placeholder='Paste long URL here '
+              />
 
-        <main id='center'>
-          <div className='info'>
-            <section className='descript-card'>
-              <h1>Short URL</h1>
-              <br></br>
-              <p>
-                Welcome to the best link shortener — Shorten long URLs into
-                clean, shareable links with just a few clicks.
-              </p>
-              <br></br>
-              <p>
-                You can easily manage your links and make sharing across
-                platforms simple and convenient.
-              </p>
-            </section>
-            <section className='shortener-card'>
-              <h2>Shorten a Link</h2>
-              <form
-                className='shortener-inputs'
-                onSubmit={handleSubmit}
-                noValidate
-              >
-                <Input
-                  type='text'
-                  name='link'
-                  svg='/icons.svg#link-icon'
-                  value={linkData.link}
-                  onChange={handleInput}
-                  placeholder='Paste long URL here '
-                />
-
-                <Button text='Shorten Link' />
-              </form>
-            </section>
-          </div>
-        </main>
-      </div>
+              <Button text='Shorten Link' />
+            </form>
+          </section>
+        </div>
+      </main>
     </>
   );
 }
