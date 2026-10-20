@@ -1,0 +1,65 @@
+.side-container {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+
+  background: var(--bg);
+  border-right: 1px solid var(--accent);
+
+  overflow-y: auto;
+  z-index: 900;
+}
+
+.side-container ul {
+  list-style: none;
+  margin-top: 20px;
+  padding: 16px 0;
+  box-sizing: border-box;
+}
+
+.side-container li {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.side-icon {
+  margin-right: 10px;
+  width: 25px;
+  height: 25px;
+  color: var(--text);
+}
+
+.side-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  box-sizing: border-box;
+  height: 40px;
+  padding: 0 0 0 50px;
+
+  border-radius: 10px;
+  background: none;
+  border: none;
+
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+
+  width: 100%;
+
+  transition:
+    background-color 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover {
+    box-shadow: var(--shadow);
+    background: var(--card-bg);
+  }
+}
