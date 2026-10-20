@@ -6,7 +6,7 @@ CREATE TABLE `multi_factor` (
 	CONSTRAINT `code_unique` UNIQUE INDEX(`code`),
 	CONSTRAINT `email_unique` UNIQUE INDEX(`email`)
 );
---> statement-breakpoint
+
 CREATE TABLE `users` (
 	`id` int AUTO_INCREMENT PRIMARY KEY,
 	`first_name` varchar(255) NOT NULL,

@@ -55,7 +55,7 @@ services:
       - '${MYSQL_PORT}:${MYSQL_PORT}'
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./database/milestone1.sql:/docker-entrypoint-initdb.d/milestone1.sql
+      # - ./database/milestone1.sql:/docker-entrypoint-initdb.d/milestone1.sql
 
   adminer:
     image: adminer
