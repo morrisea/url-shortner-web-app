@@ -10,6 +10,12 @@ import { verify } from '../controllers/verify.controller.js';
 import { sendMFA } from '../controllers/sendMFA.controller.js';
 import { verifyMFA } from '../controllers/verifyMFA.controller.js';
 
+import { setLink } from '../controllers/setLink.controller.js';
+import { getLinkPage } from '../controllers/getLinkPage.controller.js';
+import { getLink } from '../controllers/getLink.controller.js';
+import { updateLink } from '../controllers/updateLink.controller.js';
+import { deleteLink } from '../controllers/deleteLink.controller.js';
+
 const user = Router();
 
 user.post('/register', register);
@@ -19,11 +25,16 @@ user.post('/logout', logout);
 user.post('/resend-verification', resend);
 user.post('/send-mfa', sendMFA);
 user.post('/verify-mfa', verifyMFA);
+user.post('/links', setLink);
 
 user.get('/verify-email/', verify);
 
 user.use(authToken);
 
 user.get('/dashboard', dashboard);
+user.get('/links', getLinkPage);
+user.get('/links/:id', getLink);
+user.put('/links/:id', updateLink);
+user.delete('/links/:id', deleteLink);
 
 export default user;

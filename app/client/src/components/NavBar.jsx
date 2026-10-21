@@ -34,7 +34,7 @@ export default function NavBar({ title, svg }) {
     {
       name: 'Dashboard',
       path: '/dashboard',
-      includeOn: ['/', '/dashboard'],
+      includeOn: ['/', '/dashboard', '/dashboard/links'],
     },
   ];
 

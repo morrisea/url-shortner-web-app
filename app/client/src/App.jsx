@@ -5,6 +5,7 @@ import { Input } from './components/Input';
 import { Button } from './components/Button';
 
 export default function App() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [linkData, setLinkData] = useState({
     link: '',
   });
@@ -25,29 +26,27 @@ export default function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = linkData.link.trim();
+    const address = linkData.link.trim();
 
-    if (!url) {
+    if (!address) {
       setErrors({ link: true });
       return;
     }
 
     try {
-      new URL(url);
+      new URL(address);
     } catch {
       setErrors({ link: true });
       return;
     }
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-
     try {
-      const res = await fetch(`${apiUrl}/shorten`, {
+      const res = await fetch(`${apiUrl}/links`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ address }),
       });
 
       const data = await res.json();

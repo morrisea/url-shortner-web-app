@@ -11,6 +11,8 @@ import Dashboard from './pages/Dashboard';
 import VerifyEmail from './pages/VerifyEmail';
 import ProtectedRoute from './components/ProtectedRoute';
 import MultiFactor from './pages/MultiFactor';
+import ManageLinks from './pages/ManageLinks';
+
 import './index.css';
 
 const router = createBrowserRouter([
@@ -27,7 +29,10 @@ const router = createBrowserRouter([
           { path: '/verify-mfa', element: <MultiFactor /> },
           {
             element: <ProtectedRoute />,
-            children: [{ path: '/dashboard', element: <Dashboard /> }],
+            children: [
+              { path: '/dashboard', element: <Dashboard /> },
+              { path: '/dashboard/links', element: <ManageLinks /> },
+            ],
           },
         ],
       },
