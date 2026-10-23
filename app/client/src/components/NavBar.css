@@ -17,20 +17,12 @@
   margin: 20px 10px 10px;
 }
 
-.nav-container nav ul li:first-child {
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
 .nav-container nav ul li:first-child a {
-  display: flex;
-  align-items: flex-end;
   text-decoration: none;
 }
 
 .nav-container .icon {
-  align-self: flex-end;
-  margin: 0 65px;
+  padding: 0 40px;
   color: var(--accent);
   font-size: 2rem;
   font-weight: 800;
