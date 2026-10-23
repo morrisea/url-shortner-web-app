@@ -83,7 +83,7 @@ export default function DataGridLinks() {
     fetchRows().catch((error) => {
       console.error('Error fetching links:', error);
     });
-  }, [paginationModel, accessToken]);
+  });
 
   const handleDelete = async () => {
     const ids = [...selectionModel.ids];
