@@ -59,57 +59,76 @@ export default function DataGridLinks() {
     ids: new Set(),
   });
 
-  useEffect(() => {
-    async function fetchRows() {
-      const res = await fetch(
-        `${apiUrl}/links?page=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+  const fetchRows = async () => {
+    const res = await fetch(
+      `${apiUrl}/links?page=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-      );
+      },
+    );
 
-      const data = await res.json();
-
-      setRows(data.rows);
-      setRowCount(data.total);
+    if (!res.ok) {
+      throw new Error('Failed to fetch links');
     }
 
-    fetchRows();
-  }, [paginationModel, selectionModel, accessToken]);
+    const data = await res.json();
+
+    setRows(data.rows);
+    setRowCount(data.total);
+  };
+
+  useEffect(() => {
+    fetchRows().catch((error) => {
+      console.error('Error fetching links:', error);
+    });
+  }, [paginationModel, accessToken]);
 
   const handleDelete = async () => {
     const ids = [...selectionModel.ids];
 
-    if (ids.length !== 1) return;
+    if (ids.length === 0) return;
 
     const confirmed = window.confirm(
-      'Are you sure you want to remove this saved URL?',
+      `Are you sure you want to remove ${ids.length} saved URL(s)?`,
     );
 
     if (!confirmed) return;
 
     try {
-      const res = await fetch(`${apiUrl}/links/${ids[0]}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      if (ids.length === 1) {
+        const res = await fetch(`${apiUrl}/links/${ids[0]}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+      } else {
+        const res = await fetch(`${apiUrl}/links`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ids }),
+        });
+      }
 
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || 'Failed to delete URL');
+        throw new Error(data.message || 'Failed to delete URLs');
       }
 
       setSelectionModel({
         type: 'include',
         ids: new Set(),
       });
+
+      await fetchRows();
     } catch (error) {
-      console.error('Error deleting URL:', error);
+      console.error('Error deleting URLs:', error);
     }
   };
 
@@ -143,11 +162,10 @@ export default function DataGridLinks() {
         </ThemeProvider>
         <div className='btn-container'>
           <Button
+            text={`Delete selected (${selectionModel.ids.size})`}
             disabled={selectionModel.ids.size === 0}
             onClick={handleDelete}
-          >
-            Delete selected ({selectionModel.ids.size})
-          </Button>
+          />
         </div>
       </Box>
     </section>

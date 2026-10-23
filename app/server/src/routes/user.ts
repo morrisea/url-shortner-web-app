@@ -15,6 +15,7 @@ import { getLinkPage } from '../controllers/getLinkPage.controller.js';
 import { getLink } from '../controllers/getLink.controller.js';
 import { updateLink } from '../controllers/updateLink.controller.js';
 import { deleteLink } from '../controllers/deleteLink.controller.js';
+import { deleteManyLinks } from '../controllers/deleteManyLinks.controller.js';
 
 const user = Router();
 
@@ -25,7 +26,6 @@ user.post('/logout', logout);
 user.post('/resend-verification', resend);
 user.post('/send-mfa', sendMFA);
 user.post('/verify-mfa', verifyMFA);
-
 user.get('/verify-email/', verify);
 
 user.use(authToken);
@@ -36,5 +36,6 @@ user.get('/links', getLinkPage);
 user.get('/links/:id', getLink);
 user.put('/links/:id', updateLink);
 user.delete('/links/:id', deleteLink);
+user.delete('/links/', deleteManyLinks);
 
 export default user;
