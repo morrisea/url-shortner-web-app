@@ -5,17 +5,25 @@
   width: 100%;
   min-width: 0;
   height: 40px;
+
   background: var(--text);
+  border: 2px solid var(--border);
   border-radius: 20px;
-  outline: 2px solid var(--border);
+  overflow: hidden;
+
   transition:
     background-color 0.1s ease,
+    border-color 0.1s ease,
     box-shadow 0.1s ease;
+}
 
-  &:hover {
-    background: var(--text-h);
-    box-shadow: var(--shadow);
-  }
+.nav-input:hover {
+  background: var(--text-h);
+  box-shadow: var(--shadow);
+}
+
+.nav-input.nav-input-error {
+  border-color: var(--error);
 }
 
 .input-svg {

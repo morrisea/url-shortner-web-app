@@ -11,7 +11,6 @@ export function NavInput({
   invalid,
   placeholder,
   button,
-  onButtonClick,
 }) {
   return (
     <div className='nav-input-group'>
@@ -34,9 +33,8 @@ export function NavInput({
 
         {button && (
           <button
-            type='button'
+            type='submit'
             className='nav-input-button'
-            onClick={onButtonClick}
             disabled={disabled}
           >
             <svg className='btn-svg' role='presentation' aria-hidden='true'>

@@ -25,12 +25,12 @@ user.post('/logout', logout);
 user.post('/resend-verification', resend);
 user.post('/send-mfa', sendMFA);
 user.post('/verify-mfa', verifyMFA);
-user.post('/links', setLink);
 
 user.get('/verify-email/', verify);
 
 user.use(authToken);
 
+user.post('/links', setLink);
 user.get('/dashboard', dashboard);
 user.get('/links', getLinkPage);
 user.get('/links/:id', getLink);

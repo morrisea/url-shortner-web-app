@@ -62,7 +62,7 @@ export default function NavBar({ title, svg }) {
       [event.target.name]: event.target.value,
     });
 
-    setErrors({});
+    setErrors({ link: false });
   };
 
   const handleSubmit = async (event) => {
@@ -86,6 +86,7 @@ export default function NavBar({ title, svg }) {
       const res = await fetch(`${apiUrl}/links`, {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ address }),
@@ -98,6 +99,8 @@ export default function NavBar({ title, svg }) {
       }
 
       console.log('Shortened URL:', data);
+      setLinkData({ link: '' });
+      setErrors({ link: false });
     } catch (error) {
       console.error('Error shortening URL:', error);
     }
@@ -127,7 +130,7 @@ export default function NavBar({ title, svg }) {
                   onChange={handleInput}
                   placeholder='Paste long URL here'
                   button='Shorten'
-                  buttonType='submit'
+                  invalid={errors.link}
                 />
               </form>
             )}
