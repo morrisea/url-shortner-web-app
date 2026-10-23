@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 import { useAuth } from '../../context/AuthContext';
+import { Button } from '../utils/Button';
 import Box from '@mui/material/Box';
 import './DataGrid.css';
 
@@ -53,6 +54,11 @@ export default function DataGridLinks() {
     pageSize: 5,
   });
 
+  const [selectionModel, setSelectionModel] = useState({
+    type: 'include',
+    ids: new Set(),
+  });
+
   useEffect(() => {
     async function fetchRows() {
       const res = await fetch(
@@ -71,7 +77,41 @@ export default function DataGridLinks() {
     }
 
     fetchRows();
-  }, [paginationModel, accessToken]);
+  }, [paginationModel, selectionModel, accessToken]);
+
+  const handleDelete = async () => {
+    const ids = [...selectionModel.ids];
+
+    if (ids.length !== 1) return;
+
+    const confirmed = window.confirm(
+      'Are you sure you want to remove this saved URL?',
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`${apiUrl}/links/${ids[0]}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to delete URL');
+      }
+
+      setSelectionModel({
+        type: 'include',
+        ids: new Set(),
+      });
+    } catch (error) {
+      console.error('Error deleting URL:', error);
+    }
+  };
 
   return (
     <section className='links-card'>
@@ -96,9 +136,19 @@ export default function DataGridLinks() {
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[5, 10, 25]}
             checkboxSelection
+            rowSelectionModel={selectionModel}
+            onRowSelectionModelChange={setSelectionModel}
             disableRowSelectionOnClick
           />
         </ThemeProvider>
+        <div className='btn-container'>
+          <Button
+            disabled={selectionModel.ids.size === 0}
+            onClick={handleDelete}
+          >
+            Delete selected ({selectionModel.ids.size})
+          </Button>
+        </div>
       </Box>
     </section>
   );

@@ -7,3 +7,8 @@
   min-width: 0;
   box-sizing: border-box;
 }
+
+.btn-container button {
+  margin-right: 0;
+  width: 35%;
+}

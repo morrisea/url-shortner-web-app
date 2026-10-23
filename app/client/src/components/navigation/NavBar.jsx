@@ -111,8 +111,8 @@ export default function NavBar({ title, svg }) {
       <nav>
         <ul>
           <li>
-            <Link to='/'>
-              <span className='icon'>{title}</span>
+            <Link className='icon' to='/'>
+              {title}
             </Link>
           </li>
           <li>
