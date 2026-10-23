@@ -5,7 +5,7 @@ import './Layout.css';
 export default function Layout() {
   return (
     <div id='app-bg'>
-      <NavBar title='Short' svg='/icons.svg#url-icon' />
+      <NavBar title='ShortURL' svg='/icons.svg#url-icon' />
       <Outlet />
     </div>
   );
