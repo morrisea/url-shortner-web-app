@@ -1,4 +1,4 @@
-import MFAForm from '../components/MFAForm';
+import MFAForm from '../components/authentication/MFAForm';
 
 export default function MultiFactor() {
   return (

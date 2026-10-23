@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { Button } from './Button';
-import { Header } from './Header';
-import { Input } from './Input';
+import { useAuth } from '../../context/AuthContext';
+import { Button } from '../utils/Button';
+import { Header } from '../utils/Header';
+import { Input } from '../utils/Input';
 import './MFAForm.css';
 
 export default function MFAForm() {

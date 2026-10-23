@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button } from './Button';
-import { Header } from './Header';
+import { Button } from '../utils/Button';
+import { Header } from '../utils/Header';
 import './VerifyForm.css';
 
 export default function VerifyForm() {

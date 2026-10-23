@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Header } from './Header';
-import { Button } from './Button';
+import { Header } from '../utils/Header';
+import { Button } from '../utils/Button';
 import { useNavigate } from 'react-router-dom';
 import PasswordCheckList from 'react-password-checklist';
 import './RegisterForm.css';

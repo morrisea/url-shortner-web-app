@@ -1,5 +1,5 @@
-import DataGridLinks from '../components/DataGrid';
-import SideBar from '../components/SideBar';
+import DataGridLinks from '../components/dashboard/DataGrid';
+import SideBar from '../components/dashboard/SideBar';
 
 export default function ManageLinks() {
   return (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import Box from '@mui/material/Box';
 import './DataGrid.css';
 
