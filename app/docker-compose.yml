@@ -37,7 +37,8 @@ services:
       - /app/node_modules
     environment:
       CLIENT_PORT: ${CLIENT_PORT}
-      VITE_API_URL: ${API_URL}
+      VITE_API_URL: ${VITE_API_URL}
+      VITE_REDIRECT_URL: ${VITE_REDIRECT_URL}
     ports:
       - '${CLIENT_PORT}:${CLIENT_PORT}'
     depends_on:

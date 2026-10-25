@@ -61,12 +61,12 @@ export async function updateLink(req: Request, res: Response) {
   } catch (error) {
     console.error('updateLink error:', error);
 
-    if (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      error.code === 'ER_DUP_ENTRY'
-    ) {
+    const err = error as {
+      code?: string;
+      cause?: { code?: string };
+    };
+
+    if (err.code === 'ER_DUP_ENTRY' || err.cause?.code === 'ER_DUP_ENTRY') {
       return res.status(409).json({
         error: 'That redirect code is already in use.',
       });

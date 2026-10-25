@@ -4,6 +4,7 @@ import user from './routes/user.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { corsConfig } from './config/cors.conf.js';
+import { redirectLink } from './controllers/redirect.controller.js';
 
 const server = express();
 const port = 3000;
@@ -20,6 +21,7 @@ server.use(express.json());
 server.use(cookieParser());
 
 server.use('/api', user);
+server.get('/:redirect', redirectLink);
 
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

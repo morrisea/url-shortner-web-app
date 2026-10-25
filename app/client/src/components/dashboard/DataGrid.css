@@ -12,3 +12,12 @@
   margin-right: 0;
   width: 35%;
 }
+
+.grid-error {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  color: var(--error);
+  font-size: 0.875rem;
+  pointer-events: none;
+}

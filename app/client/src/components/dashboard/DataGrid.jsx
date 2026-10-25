@@ -6,58 +6,13 @@ import { Button } from '../utils/Button';
 import Box from '@mui/material/Box';
 import './DataGrid.css';
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    background: {
-      default: '#000',
-      paper: '#000',
-    },
-  },
-});
-
-const domain = 'https://localhost:5173';
-const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: 'address',
-    headerName: 'URL',
-    width: 250,
-    editable: false,
-    sortable: true,
-  },
-  {
-    field: 'shortURL',
-    headerName: 'Shortened URL',
-    rowHeader: true,
-    description: 'This column is the shortened URL to its respectively URL',
-    sortable: true,
-    width: 300,
-    valueGetter: (value, row) => `${domain}/${row.redirect || ''}`,
-  },
-  {
-    field: 'redirect',
-    headerName: 'Redirect Path',
-    rowHeader: true,
-    description: 'The path portion of the shortened URL',
-    sortable: true,
-    editable: true,
-    width: 150,
-  },
-  {
-    field: 'creationDate',
-    headerName: 'Creation Date',
-    width: 250,
-    editable: false,
-    sortable: true,
-  },
-];
-
 export default function DataGridLinks() {
   const apiUrl = import.meta.env.VITE_API_URL;
+  const redirectUrl = import.meta.env.VITE_REDIRECT_URL;
   const { accessToken } = useAuth();
   const [rows, setRows] = useState([]);
   const [rowCount, setRowCount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
@@ -67,6 +22,51 @@ export default function DataGridLinks() {
     type: 'include',
     ids: new Set(),
   });
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+      background: {
+        default: '#000',
+        paper: '#000',
+      },
+    },
+  });
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 90 },
+    {
+      field: 'address',
+      headerName: 'URL',
+      width: 250,
+      editable: false,
+      sortable: true,
+    },
+    {
+      field: 'shortURL',
+      headerName: 'Shortened URL',
+      rowHeader: true,
+      description: 'This column is the shortened URL to its respectively URL',
+      sortable: true,
+      width: 300,
+      valueGetter: (value, row) => `${redirectUrl}/${row.redirect || ''}`,
+    },
+    {
+      field: 'redirect',
+      headerName: 'Redirect Path',
+      description: 'The path portion of the shortened URL',
+      sortable: true,
+      editable: true,
+      width: 150,
+    },
+    {
+      field: 'creationDate',
+      headerName: 'Creation Date',
+      width: 250,
+      editable: false,
+      sortable: true,
+    },
+  ];
 
   const fetchRows = async () => {
     const res = await fetch(
@@ -99,24 +99,34 @@ export default function DataGridLinks() {
       return updatedRow;
     }
 
-    const res = await fetch(`${apiUrl}/links/${updatedRow.id}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        redirect: updatedRow.redirect,
-      }),
-    });
+    setErrorMessage('');
 
-    const data = await res.json();
+    try {
+      const res = await fetch(`${apiUrl}/links/${updatedRow.id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          redirect: updatedRow.redirect,
+        }),
+      });
 
-    if (!res.ok) {
-      throw new Error(data.error || 'Failed to update redirect');
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to update redirect.');
+      }
+
+      return updatedRow;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to update redirect.';
+
+      setErrorMessage(message);
+      throw error;
     }
-
-    return updatedRow;
   };
 
   const handleDelete = async () => {
@@ -178,6 +188,7 @@ export default function DataGridLinks() {
           width: '100%',
           minWidth: 0,
           boxSizing: 'border-box',
+          position: 'relative',
         }}
       >
         <ThemeProvider theme={darkTheme}>
@@ -200,6 +211,9 @@ export default function DataGridLinks() {
             }}
           />
         </ThemeProvider>
+        <div className='grid-error' role='alert'>
+          {errorMessage}
+        </div>
         <div className='btn-container'>
           <Button
             text={`Delete selected (${selectionModel.ids.size})`}
