@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export function AuthProvider() {
   const [accessToken, setAccessToken] = useState(null);
@@ -58,8 +58,4 @@ export function AuthProvider() {
       <Outlet />
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

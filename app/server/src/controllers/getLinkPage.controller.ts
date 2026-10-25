@@ -27,7 +27,7 @@ export const getLinkPage = async (req: Request, res: Response) => {
       .select({
         id: urls.id,
         address: urls.address,
-        redirect: urls.redirect,
+        redirect: savedURLs.redirect,
         creationDate: savedURLs.creationDate,
       })
       .from(savedURLs)

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import { Button } from '../utils/Button';
 import Box from '@mui/material/Box';
 import './DataGrid.css';
@@ -83,7 +83,7 @@ export default function DataGridLinks() {
     fetchRows().catch((error) => {
       console.error('Error fetching links:', error);
     });
-  });
+  }, []);
 
   const handleDelete = async () => {
     const ids = [...selectionModel.ids];
@@ -94,18 +94,19 @@ export default function DataGridLinks() {
       `Are you sure you want to remove ${ids.length} saved URL(s)?`,
     );
 
+    let res;
     if (!confirmed) return;
 
     try {
       if (ids.length === 1) {
-        const res = await fetch(`${apiUrl}/links/${ids[0]}`, {
+        res = await fetch(`${apiUrl}/links/${ids[0]}`, {
           method: 'DELETE',
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
       } else {
-        const res = await fetch(`${apiUrl}/links`, {
+        res = await fetch(`${apiUrl}/links`, {
           method: 'DELETE',
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -155,9 +156,10 @@ export default function DataGridLinks() {
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[5, 10, 25]}
             checkboxSelection
+            disableRowSelectionOnClick
+            disableRowSelectionExcludeModel
             rowSelectionModel={selectionModel}
             onRowSelectionModelChange={setSelectionModel}
-            disableRowSelectionOnClick
           />
         </ThemeProvider>
         <div className='btn-container'>

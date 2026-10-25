@@ -27,7 +27,7 @@ export async function setLink(req: Request, res: Response) {
       });
     }
 
-    const normalizedAddress = address.trim();
+    const normalizedAddress = parsedURL.href;
     const addressHash = generateHash(normalizedAddress);
 
     let [url] = await db
@@ -37,21 +37,18 @@ export async function setLink(req: Request, res: Response) {
       .limit(1);
 
     if (!url) {
-      const redirect = generateRedirectPath();
-
-      const res = await db.insert(urls).values({
+      const result = await db.insert(urls).values({
         address: normalizedAddress,
         addressHash,
-        redirect,
       });
 
-      const [shortURL] = await db
+      const [newURL] = await db
         .select()
         .from(urls)
-        .where(eq(urls.id, Number(res[0].insertId)))
+        .where(eq(urls.id, Number(result[0].insertId)))
         .limit(1);
 
-      url = shortURL;
+      url = newURL;
     }
 
     if (!url) {
@@ -59,6 +56,7 @@ export async function setLink(req: Request, res: Response) {
     }
 
     const user = req.user as AuthToken;
+    let redirect: string | null = null;
 
     if (user) {
       const [saved] = await db
@@ -67,10 +65,15 @@ export async function setLink(req: Request, res: Response) {
         .where(and(eq(savedURLs.userId, user.id), eq(savedURLs.urlId, url.id)))
         .limit(1);
 
-      if (!saved) {
+      if (saved) {
+        redirect = saved.redirect;
+      } else {
+        redirect = generateRedirectPath();
+
         await db.insert(savedURLs).values({
           userId: user.id,
           urlId: url.id,
+          redirect,
         });
       }
     }
@@ -80,7 +83,7 @@ export async function setLink(req: Request, res: Response) {
       url: {
         id: url.id,
         address: url.address,
-        redirect: url.redirect,
+        redirect,
       },
     });
   } catch (error) {

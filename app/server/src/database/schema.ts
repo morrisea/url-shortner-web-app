@@ -28,7 +28,6 @@ export const urls = mysqlTable('urls', {
   id: int('id').primaryKey().autoincrement(),
   address: varchar('address', { length: 2048 }).notNull(),
   addressHash: varchar('address_hash', { length: 64 }).notNull().unique(),
-  redirect: varchar('redirect', { length: 16 }).notNull().unique(),
   creationDate: timestamp('creation_date').notNull().defaultNow(),
 });
 
@@ -41,9 +40,14 @@ export const savedURLs = mysqlTable(
     urlId: int('url_id')
       .notNull()
       .references(() => urls.id, { onDelete: 'cascade' }),
+    redirect: varchar('redirect', { length: 16 }).notNull().unique(),
     creationDate: timestamp('creation_date').notNull().defaultNow(),
   },
   (table) => [
-    uniqueIndex('saved_urls_user_url_idx').on(table.userId, table.urlId),
+    uniqueIndex('saved_urls_user_url_idx').on(
+      table.userId,
+      table.urlId,
+      table.redirect,
+    ),
   ],
 );
