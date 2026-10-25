@@ -61,6 +61,17 @@ export async function updateLink(req: Request, res: Response) {
   } catch (error) {
     console.error('updateLink error:', error);
 
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      error.code === 'ER_DUP_ENTRY'
+    ) {
+      return res.status(409).json({
+        error: 'That redirect code is already in use.',
+      });
+    }
+
     return res.status(500).json({
       error: 'Internal server error.',
     });
