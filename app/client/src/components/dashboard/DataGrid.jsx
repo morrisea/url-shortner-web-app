@@ -22,7 +22,7 @@ const columns = [
   {
     field: 'address',
     headerName: 'URL',
-    width: 350,
+    width: 250,
     editable: false,
     sortable: true,
   },
@@ -32,8 +32,17 @@ const columns = [
     rowHeader: true,
     description: 'This column is the shortened URL to its respectively URL',
     sortable: true,
-    width: 350,
+    width: 300,
     valueGetter: (value, row) => `${domain}/${row.redirect || ''}`,
+  },
+  {
+    field: 'redirect',
+    headerName: 'Redirect Path',
+    rowHeader: true,
+    description: 'The path portion of the shortened URL',
+    sortable: true,
+    editable: true,
+    width: 150,
   },
   {
     field: 'creationDate',
@@ -84,6 +93,31 @@ export default function DataGridLinks() {
       console.error('Error fetching links:', error);
     });
   }, []);
+
+  const processRowUpdate = async (updatedRow, originalRow) => {
+    if (updatedRow.redirect === originalRow.redirect) {
+      return updatedRow;
+    }
+
+    const res = await fetch(`${apiUrl}/links/${updatedRow.id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        redirect: updatedRow.redirect,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to update redirect');
+    }
+
+    return updatedRow;
+  };
 
   const handleDelete = async () => {
     const ids = [...selectionModel.ids];
@@ -160,6 +194,10 @@ export default function DataGridLinks() {
             disableRowSelectionExcludeModel
             rowSelectionModel={selectionModel}
             onRowSelectionModelChange={setSelectionModel}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={(error) => {
+              console.error('Error updating redirect:', error);
+            }}
           />
         </ThemeProvider>
         <div className='btn-container'>
