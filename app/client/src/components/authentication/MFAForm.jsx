@@ -12,6 +12,8 @@ export default function MFAForm() {
   const location = useLocation();
   const email = location.state?.email;
   const apiUrl = import.meta.env.VITE_API_URL;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [userData, setUserData] = useState({
     email: '',
     code: '',
@@ -37,41 +39,60 @@ export default function MFAForm() {
   };
 
   const resendMFA = async () => {
-    const res = await fetch(`${apiUrl}/send-mfa`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email }),
-      credentials: 'include',
-    });
+    setIsResending(true);
+
+    try {
+      const res = await fetch(`${apiUrl}/send-mfa`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        setErrors({ login: true });
+      }
+    } catch {
+      setErrors({ login: true });
+    } finally {
+      setIsResending(false);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
-    const res = await fetch(`${apiUrl}/verify-mfa`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email, code: userData.code }),
-      credentials: 'include',
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setAccessToken(data.accessToken);
-
-      navigate('/dashboard', { replace: true });
-    } else if (res.status == 403) {
-      navigate('/verify-email', {
-        state: { email: data.email },
-        replace: true,
+    try {
+      const res = await fetch(`${apiUrl}/verify-mfa`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email, code: userData.code }),
+        credentials: 'include',
       });
-    } else {
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setAccessToken(data.accessToken);
+
+        navigate('/dashboard', { replace: true });
+      } else if (res.status == 403) {
+        navigate('/verify-email', {
+          state: { email: data.email },
+          replace: true,
+        });
+      } else {
+        setErrors({ login: true });
+      }
+    } catch {
       setErrors({ login: true });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -105,11 +126,19 @@ export default function MFAForm() {
           <div className='mfa-info'>
             <div className='resend'>
               Didn't receive a code?
-              <button className='resend-link' type='button' onClick={resendMFA}>
-                Resend Code
+              <button
+                className='resend-link'
+                type='button'
+                onClick={resendMFA}
+                disabled={isResending || loading}
+              >
+                {isResending ? 'Resending...' : 'Resend Code'}
               </button>
             </div>
-            <Button text='Log In' />
+            <Button
+              text={isSubmitting ? 'Verifying...' : 'Verify'}
+              disabled={loading || isSubmitting}
+            />
           </div>
         </form>
       </div>

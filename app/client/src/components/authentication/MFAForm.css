@@ -23,6 +23,10 @@
   font: inherit;
 }
 
+.resend-link:disabled {
+  background-color: var(--bg);
+}
+
 .mfa-info {
   display: flex;
   flex-direction: column;

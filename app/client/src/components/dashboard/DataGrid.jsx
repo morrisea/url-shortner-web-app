@@ -214,13 +214,11 @@ export default function DataGridLinks() {
         <div className='grid-error' role='alert'>
           {errorMessage}
         </div>
-        <div className='btn-container'>
-          <Button
-            text={`Delete selected (${selectionModel.ids.size})`}
-            disabled={selectionModel.ids.size === 0}
-            onClick={handleDelete}
-          />
-        </div>
+        <Button
+          text={`Delete selected (${selectionModel.ids.size})`}
+          disabled={selectionModel.ids.size === 0}
+          onClick={handleDelete}
+        />
       </Box>
     </section>
   );

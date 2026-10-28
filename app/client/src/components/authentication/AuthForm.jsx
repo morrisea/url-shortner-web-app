@@ -8,8 +8,11 @@ import './AuthForm.css';
 
 export default function AuthForm() {
   const { accessToken, loading } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+
   const [verified, setVerified] = useState(
     searchParams.get('verified') === 'true',
   );
@@ -43,32 +46,37 @@ export default function AuthForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-
-    const res = await fetch(`${apiUrl}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-      credentials: 'include',
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      navigate('/verify-mfa', {
-        state: { email: userData.email },
-        replace: true,
+    try {
+      const res = await fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+        credentials: 'include',
       });
-    } else if (res.status == 403) {
-      navigate('/verify-email', {
-        state: { email: data.email },
-        replace: true,
-      });
-    } else {
+
+      const data = await res.json();
+
+      if (res.ok) {
+        navigate('/verify-mfa', {
+          state: { email: userData.email },
+          replace: true,
+        });
+      } else if (res.status === 403) {
+        navigate('/verify-email', {
+          state: { email: data.email },
+          replace: true,
+        });
+      } else {
+        setErrors({ login: true });
+      }
+    } catch {
       setErrors({ login: true });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -109,7 +117,10 @@ export default function AuthForm() {
                 Email verified successfully. You can now log in.
               </div>
             )}
-            <Button text='Log In' />
+            <Button
+              text={isSubmitting ? 'Logging In...' : 'Log In'}
+              disabled={isSubmitting || loading}
+            />
           </div>
         </form>
       </div>
