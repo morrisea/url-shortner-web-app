@@ -44,6 +44,8 @@ function RegisterInput({
 }
 
 export default function RegisterForm() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -115,68 +117,73 @@ export default function RegisterForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
-    const errorMessages = {};
+    try {
+      const errorMessages = {};
 
-    if (!userData.firstName) {
-      errorMessages.firstName = 'Invalid first name';
-    }
+      if (!userData.firstName) {
+        errorMessages.firstName = 'Invalid first name';
+      }
 
-    if (!userData.lastName) {
-      errorMessages.lastName = 'Invalid last name';
-    }
+      if (!userData.lastName) {
+        errorMessages.lastName = 'Invalid last name';
+      }
 
-    if (!userData.email || !isValidEmail(userData.email)) {
-      errorMessages.email = 'Invalid email';
-    }
+      if (!userData.email || !isValidEmail(userData.email)) {
+        errorMessages.email = 'Invalid email';
+      }
 
-    if (!isValidPassword(userData.password)) {
-      errorMessages.password = 'Password does not meet requirements';
-    }
+      if (!isValidPassword(userData.password)) {
+        errorMessages.password = 'Password does not meet requirements';
+      }
 
-    if (userData.password !== userData.confirmPassword) {
-      errorMessages.confirmPassword = 'Passwords do not match';
-    }
+      if (userData.password !== userData.confirmPassword) {
+        errorMessages.confirmPassword = 'Passwords do not match';
+      }
 
-    setFormErrors(errorMessages);
+      setFormErrors(errorMessages);
 
-    if (Object.keys(errorMessages).length > 0) {
-      return;
-    }
+      if (Object.keys(errorMessages).length > 0) {
+        return;
+      }
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-
-    const res = await fetch(`${apiUrl}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (res.status === 409) {
-      setFormErrors((prev) => ({
-        ...prev,
-        email: 'Email already in use',
-      }));
-
-      return;
-    }
-
-    if (!res.ok) {
-      setFormErrors({
-        email: 'Registration failed',
+      const res = await fetch(`${apiUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
       });
 
-      return;
+      if (res.status === 409) {
+        setFormErrors((prev) => ({
+          ...prev,
+          email: 'Email already in use',
+        }));
+        return;
+      }
+
+      if (!res.ok) {
+        setFormErrors({
+          email: 'Registration failed',
+        });
+        return;
+      }
+
+      const data = await res.json();
+
+      navigate('/verify-email', {
+        state: { email: data.email },
+        replace: true,
+      });
+    } catch {
+      setFormErrors({
+        email: 'Unable to register. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const data = await res.json();
-
-    navigate('/verify-email', {
-      state: { email: data.email },
-      replace: true,
-    });
   };
 
   return (
@@ -258,7 +265,10 @@ export default function RegisterForm() {
             valueAgain={userData.confirmPassword}
           />
           <div>
-            <Button />
+            <Button
+              text={isSubmitting ? 'Creating Account...' : 'Sign Up'}
+              disabled={isSubmitting}
+            />{' '}
           </div>
         </form>
       </div>
