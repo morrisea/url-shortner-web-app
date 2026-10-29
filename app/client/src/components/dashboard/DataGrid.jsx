@@ -53,7 +53,7 @@ export default function DataGridLinks() {
     },
     {
       field: 'redirect',
-      headerName: 'Redirect Path',
+      headerName: 'Custom Path',
       description: 'The path portion of the shortened URL',
       sortable: true,
       editable: true,
