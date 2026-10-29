@@ -8,7 +8,7 @@ export default function NavBar({ title, svg }) {
   const { accessToken, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
   const [linkData, setLinkData] = useState({
     link: '',
@@ -76,11 +76,18 @@ export default function NavBar({ title, svg }) {
     }
 
     try {
-      new URL(address);
+      const url = new URL(address);
+
+      if (!['http:', 'https:'].includes(url.protocol)) {
+        setErrors({ link: true });
+        return;
+      }
     } catch {
       setErrors({ link: true });
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const res = await fetch(`${apiUrl}/links`, {
@@ -103,6 +110,8 @@ export default function NavBar({ title, svg }) {
       setErrors({ link: false });
     } catch (error) {
       console.error('Error shortening URL:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -130,6 +139,7 @@ export default function NavBar({ title, svg }) {
                   onChange={handleInput}
                   placeholder='Paste long URL here'
                   button='Shorten'
+                  disabled={isSubmitting}
                   invalid={errors.link}
                 />
               </form>

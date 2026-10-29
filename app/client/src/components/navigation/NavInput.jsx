@@ -38,7 +38,11 @@ export function NavInput({
             disabled={disabled}
           >
             <svg className='btn-svg' role='presentation' aria-hidden='true'>
-              <use href='/icons.svg#check-icon'></use>
+              <use
+                href={
+                  disabled ? '/icons.svg#dot-icon' : '/icons.svg#check-icon'
+                }
+              ></use>
             </svg>
           </button>
         )}
