@@ -1,9 +1,9 @@
-# URL Shortener Milestone One
+# URL Shortener Milestone Two
 
 **Author:** Evan Morris <br>
 **Course:** CS518 - Web Programming <br>
 **Semester:** Fall 2026 <br>
-**Due Date:** Oct 8, 2026 <br>
+**Due Date:** Nov 5, 2026 <br>
 
 ## Project Description
 
@@ -17,13 +17,13 @@ Milestone One includes the following: application setup, registration, email ver
 
 | Category           | Technologies                         |
 | ------------------ | ------------------------------------ |
-| **Frontend**       | React, Vite, React Router            |
+| **Frontend**       | React, Vite, React Router, Mui       |
 | **Backend**        | Express.js, TypeScript, CORS, dotenv |
 | **Database**       | MySQL, Drizzle ORM                   |
 | **Authentication** | JWT, bcrypt, Cookie Parser           |
 | **Email**          | Nodemailer                           |
 | **Infrastructure** | Docker                               |
-| **Development**    | ESLint, Nodemon, Drizzle Kit, tsx    |
+| **Development**    | ESLint, Drizzle Kit, tsx             |
 
 ## Installation, Database, and Environment Setup
 
@@ -55,6 +55,7 @@ Create the required `.env` file in `fall26-morrisea/app/` meeting the following 
 
 ```bash
 # Server
+API_URL=
 SERVER_PORT=
 NODE_ENV=
 DATABASE_URL=
@@ -71,7 +72,8 @@ MFA_TTL= # in minutes
 
 # Client
 CLIENT_PORT=
-API_URL=
+VITE_API_URL=
+VITE_REDIRECT_URL=
 
 # Database
 MYSQL_ROOT_PASSWORD=
@@ -100,7 +102,9 @@ Apply the Drizzle ORM migrations:
 docker compose exec server npx drizzle-kit migrate
 ```
 
-### Schema
+## Schema
+
+### Users Table
 
 The `users` table stores account information for registered users. It contains the user's personal identifying information, password hash, email verification status, and account creation timestamp.
 
@@ -124,6 +128,28 @@ The `multi_factor` table temporarily stores email-based multi-factor authenticat
 | `code`       | `VARCHAR(8)`   | Not Null, Unique            | Temporary MFA verification code              |
 | `email`      | `VARCHAR(255)` | Not Null, Unique            | Email address associated with the MFA code   |
 | `expires_at` | `TIMESTAMP`    | Not Null                    | Determines when the MFA code becomes invalid |
+
+### URLs Table
+
+The `urls` table stores submitted URLs. Each URL is assigned a unique identifier and a SHA-256 hash to prevent duplicate URL entries. The creation timestamp records when the URL was first added to the database.
+
+| Field           | Type            | Constraints                 | Purpose                                                            |
+| --------------- | --------------- | --------------------------- | ------------------------------------------------------------------ |
+| `id`            | `INT`           | Primary Key, Auto Increment | Unique identifier for each URL                                     |
+| `address`       | `VARCHAR(2048)` | Not Null                    | Stores the original URL address                                    |
+| `address_hash`  | `VARCHAR(64)`   | Not Null, Unique            | Stores the SHA-256 hash of the original URL to identify duplicates |
+| `creation_date` | `TIMESTAMP`     | Not Null, Default `NOW()`   | Records when the URL was first added                               |
+
+### Saved URLs Table
+
+The `saved_urls` table stores data related between users and URLs, allowing users to save URLs to their accounts. It implements a many-to-many relationship between the `users` and `urls` tables.
+
+| Field           | Type          | Constraints               | Purpose                                         |
+| --------------- | ------------- | ------------------------- | ----------------------------------------------- |
+| `user_id`       | `INT`         | Not Null, Foreign Key     | References the user who saved the URL           |
+| `url_id`        | `INT`         | Not Null, Foreign Key     | References the original URL in the `urls` table |
+| `redirect`      | `VARCHAR(16)` | Not Null, Unique          | Stores the unique shortened URL identifier      |
+| `creation_date` | `TIMESTAMP`   | Not Null, Default `NOW()` | Records when the URL was saved by the user      |
 
 ## Authentication Workflow
 
@@ -190,17 +216,24 @@ The `multi_factor` table temporarily stores email-based multi-factor authenticat
 
 The backend provides the following endpoints:
 
-| Method | Endpoint               | Purpose                                                            |
-| ------ | ---------------------- | ------------------------------------------------------------------ |
-| `POST` | `/register`            | Registers a new user account                                       |
-| `POST` | `/login`               | Validates the user's login credentials                             |
-| `POST` | `/refresh`             | Refreshes an expired access token using the refresh token          |
-| `POST` | `/logout`              | Logs the user out and clears the authentication session            |
-| `POST` | `/resend-verification` | Resends the email verification link                                |
-| `POST` | `/send-mfa`            | Sends a multi-factor authentication code to the user's email       |
-| `POST` | `/verify-mfa`          | Verifies the multi-factor authentication code                      |
-| `GET`  | `/verify-email/`       | Verifies the user's email using the verification token             |
-| `GET`  | `/dashboard`           | Returns the protected dashboard resource for an authenticated user |
+| Method   | Endpoint               | Purpose                                                                  |
+| -------- | ---------------------- | ------------------------------------------------------------------------ |
+| `POST`   | `/register`            | Registers a new user account                                             |
+| `POST`   | `/login`               | Validates the user's login credentials                                   |
+| `POST`   | `/refresh`             | Refreshes an expired access token using the refresh token                |
+| `POST`   | `/logout`              | Logs the user out and clears the authentication session                  |
+| `POST`   | `/resend-verification` | Resends the email verification link                                      |
+| `POST`   | `/send-mfa`            | Sends a multi-factor authentication code to the user's email             |
+| `POST`   | `/verify-mfa`          | Verifies the multi-factor authentication code                            |
+| `POST`   | `/links`               | Creates a shortened URL                                                  |
+| `GET`    | `/verify-email/`       | Verifies the user's email using the verification token                   |
+| `GET`    | `/dashboard`           | Returns the protected dashboard resource for an authenticated user       |
+| `GET`    | `/links`               | Retrieves a paginated list of URLs saved by the authenticated user       |
+| `GET`    | `/links/:id`           | Retrieves a specific saved URL                                           |
+| `GET`    | `/:redirect`           | Redirects visitors to the original URL associated with the shortened URL |
+| `PUT`    | `/links/:id`           | Updates a saved URL                                                      |
+| `DELETE` | `/links/:id`           | Deletes a specific saved URL                                             |
+| `DELETE` | `/links/`              | Deletes multiple saved URLs                                              |
 
 ## Known Issues
 
@@ -221,3 +254,4 @@ The backend provides the following endpoints:
 - ChatGPT - error parsing, <https://chatgpt.com/>
 - JWTs - jsonwebtoken, <https://github.com/auth0/node-jsonwebtoken>
 - drizzle - Documentation, <https://orm.drizzle.team/docs/overview>
+- Material UI - Documentation, <https://mui.com/material-ui/getting-started/>
