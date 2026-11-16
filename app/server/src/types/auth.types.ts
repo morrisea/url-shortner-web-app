@@ -14,6 +14,7 @@ export interface RegisterResponseBody {
 export interface LoginRequestBody {
   email: string;
   password: string;
+  recaptchaToken: string;
 }
 
 export interface LoginResponseBody {

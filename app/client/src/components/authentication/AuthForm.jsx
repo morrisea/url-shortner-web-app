@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { Button } from '../utils/Button';
 import { Header } from '../utils/Header';
 import { Input } from '../utils/Input';
+import ReCAPTCHA from 'react-google-recaptcha';
 import './AuthForm.css';
 
 export default function AuthForm() {
@@ -12,6 +13,8 @@ export default function AuthForm() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [siteToken, setSiteToken] = useState(null);
+  const recaptchaRef = useRef(null);
 
   const [verified, setVerified] = useState(
     searchParams.get('verified') === 'true',
@@ -46,6 +49,12 @@ export default function AuthForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!siteToken) {
+      setErrors({ login: true });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -54,7 +63,10 @@ export default function AuthForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify({
+          ...userData,
+          recaptchaToken: siteToken,
+        }),
         credentials: 'include',
       });
 
@@ -77,6 +89,8 @@ export default function AuthForm() {
       setErrors({ login: true });
     } finally {
       setIsSubmitting(false);
+      setSiteToken(null);
+      recaptchaRef.current?.reset();
     }
   };
 
@@ -112,6 +126,16 @@ export default function AuthForm() {
                 Sign Up
               </Link>
             </div>
+            <div className='recaptcha-container'>
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                theme='dark'
+                sitekey={import.meta.env.VITE_SITE_KEY}
+                onChange={(value) => setSiteToken(value)}
+                onExpired={() => setSiteToken(null)}
+                onErrored={() => setSiteToken(null)}
+              />
+            </div>
             {verified && (
               <div className='verified-message'>
                 Email verified successfully. You can now log in.
@@ -119,7 +143,7 @@ export default function AuthForm() {
             )}
             <Button
               text={isSubmitting ? 'Logging In...' : 'Log In'}
-              disabled={isSubmitting || loading}
+              disabled={isSubmitting || loading || !siteToken}
             />
           </div>
         </form>

@@ -23,6 +23,7 @@ services:
       SMTP_VALIDATION_TTL: ${SMTP_VALIDATION_TTL}
       MFA_TTL: ${MFA_TTL}
       FRONTEND_URL: ${FRONTEND_URL}
+      RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
     depends_on:
       - database
     volumes:
@@ -39,6 +40,7 @@ services:
       CLIENT_PORT: ${CLIENT_PORT}
       VITE_API_URL: ${VITE_API_URL}
       VITE_REDIRECT_URL: ${VITE_REDIRECT_URL}
+      VITE_SITE_KEY: ${VITE_SITE_KEY_LOCAL}
     ports:
       - '${CLIENT_PORT}:${CLIENT_PORT}'
     depends_on:

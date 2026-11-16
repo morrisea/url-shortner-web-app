@@ -9,17 +9,26 @@ import { compare } from '../utils/bcrypt.helper.js';
 import { generateCode } from '../utils/crypto.helper.js';
 import { sendEmail } from '../utils/nodemailer.helper.js';
 import { mfaConfig } from '../config/mfa.conf.js';
+import { verifyRecaptcha } from '../utils/verifyReCAPTCHA.js';
 
 export const login = async (
   req: Request<{}, {}, LoginRequestBody>,
   res: Response<LoginResponseBody>,
 ) => {
-  const { email, password } = req.body || {};
+  const { email, password, recaptchaToken } = req.body || {};
 
   try {
-    if ([email, password].some((value) => !value)) {
+    if ([email, password, recaptchaToken].some((value) => !value)) {
       return res.status(422).json({
         message: 'All fields are required',
+      });
+    }
+
+    const isHuman = await verifyRecaptcha(recaptchaToken);
+
+    if (!isHuman) {
+      return res.status(400).json({
+        message: 'CAPTCHA verification failed',
       });
     }
 
@@ -31,7 +40,7 @@ export const login = async (
       });
     }
 
-    const isValidUser = await compare(password, user['passwordHash']);
+    const isValidUser = await compare(password, user.passwordHash);
 
     if (!isValidUser) {
       return res.status(401).json({
