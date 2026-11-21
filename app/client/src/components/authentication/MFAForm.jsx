@@ -105,6 +105,8 @@ export default function MFAForm() {
         </div>
         <form className='mfa-inputs' onSubmit={handleSubmit} noValidate>
           <Input
+            id='email'
+            label='email'
             type='email'
             name='email'
             placeholder='Email'
@@ -114,6 +116,8 @@ export default function MFAForm() {
           />
 
           <Input
+            id='code'
+            label='code'
             type='text'
             name='code'
             placeholder='Code'

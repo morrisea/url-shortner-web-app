@@ -15,6 +15,11 @@ import ManageLinks from './pages/ManageLinks';
 
 import './index.css';
 
+if (window.self !== window.top) {
+  document.body.innerHTML =
+    '<h2>Access Denied: Clickjacking Attempt Detected</h2>';
+}
+
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,

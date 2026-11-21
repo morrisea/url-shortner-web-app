@@ -10,6 +10,7 @@ export function Input({
   error,
   invalid,
   placeholder,
+  label,
 }) {
   return (
     <div className='input-group'>
@@ -20,7 +21,14 @@ export function Input({
           <use href={svg}></use>
         </svg>
 
+        <label className='sr-only' forHtml={name}>
+          {label}
+        </label>
+
         <input
+          id={name}
+          aria-invalid={invalid}
+          aria-describedby={error ? `${name}-error` : undefined}
           placeholder={placeholder}
           name={name}
           type={type}

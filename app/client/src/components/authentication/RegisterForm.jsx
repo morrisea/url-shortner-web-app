@@ -17,6 +17,7 @@ function RegisterInput({
   maxLength,
   autoComplete,
   onPaste,
+  label,
 }) {
   return (
     <div className='reg-input-group'>
@@ -27,7 +28,13 @@ function RegisterInput({
           {svg && <use href={svg}></use>}
         </svg>
 
+        <label className='sr-only' forHtml={name}>
+          {label}
+        </label>
+
         <input
+          id={name}
+          aria-describedby={error ? `${name}-error` : undefined}
           placeholder={placeholder}
           name={name}
           type={type}
@@ -193,6 +200,8 @@ export default function RegisterForm() {
         <form className='reg-inputs' onSubmit={handleSubmit} noValidate>
           <div className='name'>
             <RegisterInput
+              id='firstName'
+              label='first name'
               type='text'
               name='firstName'
               placeholder='First Name'
@@ -206,6 +215,8 @@ export default function RegisterForm() {
             />
 
             <RegisterInput
+              id='lastName'
+              label='last name'
               type='text'
               name='lastName'
               placeholder='Last Name'
@@ -219,6 +230,8 @@ export default function RegisterForm() {
             />
           </div>
           <RegisterInput
+            id='email'
+            label='email'
             type='email'
             name='email'
             placeholder='Email'
@@ -230,6 +243,8 @@ export default function RegisterForm() {
           />
 
           <RegisterInput
+            id='password'
+            label='password'
             type='password'
             name='password'
             placeholder='Password'
@@ -243,6 +258,8 @@ export default function RegisterForm() {
           />
 
           <RegisterInput
+            id='confirmPassword'
+            label='confirm password'
             type='password'
             name='confirmPassword'
             placeholder='Confirm Password'

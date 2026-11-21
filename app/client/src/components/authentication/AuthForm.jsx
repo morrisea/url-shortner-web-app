@@ -100,6 +100,8 @@ export default function AuthForm() {
         <Header title='Log In' />
         <form className='login-inputs' onSubmit={handleSubmit} noValidate>
           <Input
+            id='email'
+            label='email'
             type='email'
             name='email'
             placeholder='Email'
@@ -111,6 +113,8 @@ export default function AuthForm() {
           />
 
           <Input
+            id='password'
+            label='password'
             type='password'
             name='password'
             placeholder='Password'
