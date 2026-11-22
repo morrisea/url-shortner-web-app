@@ -30,21 +30,21 @@ services:
       - ./server:/workspace
       - /workspace/node_modules
 
-  client:
-    build:
-      context: ./client
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    environment:
-      CLIENT_PORT: ${CLIENT_PORT}
-      VITE_API_URL: ${VITE_API_URL}
-      VITE_REDIRECT_URL: ${VITE_REDIRECT_URL}
-      VITE_SITE_KEY: ${VITE_SITE_KEY_LOCAL}
-    ports:
-      - '${CLIENT_PORT}:${CLIENT_PORT}'
-    depends_on:
-      - server
+  # client:
+  #   build:
+  #     context: ./client
+  #   volumes:
+  #     - ./client:/app
+  #     - /app/node_modules
+  #   environment:
+  #     CLIENT_PORT: ${CLIENT_PORT}
+  #     VITE_API_URL: ${VITE_API_URL}
+  #     VITE_REDIRECT_URL: ${VITE_REDIRECT_URL}
+  #     VITE_SITE_KEY: ${VITE_SITE_KEY_LOCAL}
+  #   ports:
+  #     - '${CLIENT_PORT}:${CLIENT_PORT}'
+  #   depends_on:
+  #     - server
 
   # database:
   #   image: mysql:8.4

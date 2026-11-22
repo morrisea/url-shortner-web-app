@@ -8,12 +8,13 @@ import { redirectLink } from './controllers/redirect.controller.js';
 import helmet from 'helmet';
 
 const server = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 server.use(
   cors({
     origin: corsConfig.url,
     allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }),
 );
