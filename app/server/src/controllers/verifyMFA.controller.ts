@@ -42,8 +42,10 @@ export const verifyMFA = async (req: Request, res: Response) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'prod',
+      // secure: process.env.NODE_ENV === 'prod',
+      secure: true,
       sameSite: 'lax',
+      path: '/',
       maxAge: Number(jwtConfig.refreshTTL) * 24 * 60 * 60 * 1000,
     });
 
