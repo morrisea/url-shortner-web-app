@@ -56,18 +56,5 @@
 }
 
 .shortener-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  background-color: var(--bg);
-  margin: auto;
-  height: 400px;
-  width: 600px;
-
-  box-sizing: border-box;
-  border: 1px solid var(--accent);
-  border-radius: 5px;
-  visibility: hidden;
+  display: none;
 }
