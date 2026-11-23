@@ -44,7 +44,7 @@ export const verifyMFA = async (req: Request, res: Response) => {
       httpOnly: true,
       // secure: process.env.NODE_ENV === 'prod',
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       path: '/',
       maxAge: Number(jwtConfig.refreshTTL) * 24 * 60 * 60 * 1000,
     });
