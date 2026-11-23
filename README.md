@@ -1,9 +1,9 @@
-# URL Shortener Milestone Two
+# URL Shortener Milestone Three
 
 **Author:** Evan Morris <br>
 **Course:** CS518 - Web Programming <br>
 **Semester:** Fall 2026 <br>
-**Due Date:** Nov 5, 2026 <br>
+**Due Date:** Dec 3, 2026 <br>
 
 ## Project Description
 
@@ -11,19 +11,17 @@ The project will consist of a web application that allows users to create shorte
 
 The primary purpose of the application is to make long and difficult-to-share URLs shorter and easier to distribute while giving users a centralized location to manage their links.
 
-Milestone One includes the following: application setup, registration, email verification, login, email-based two-factor authentication, protected access, and logout. Project-specific features will be added in future milestones.
-
 ## Technologies Used
 
-| Category           | Technologies                         |
-| ------------------ | ------------------------------------ |
-| **Frontend**       | React, Vite, React Router, Mui       |
-| **Backend**        | Express.js, TypeScript, CORS, dotenv |
-| **Database**       | MySQL, Drizzle ORM                   |
-| **Authentication** | JWT, bcrypt, Cookie Parser           |
-| **Email**          | Nodemailer                           |
-| **Infrastructure** | Docker                               |
-| **Development**    | ESLint, Drizzle Kit, tsx             |
+| Category           | Technologies                                 |
+| ------------------ | -------------------------------------------- |
+| **Frontend**       | React, Vite, React Router, Mui               |
+| **Backend**        | Express.js, TypeScript, CORS, dotenv, helmet |
+| **Database**       | MySQL, Drizzle ORM                           |
+| **Authentication** | JWT, bcrypt, Cookie Parser, Google ReCAPTCHA |
+| **Email**          | Nodemailer                                   |
+| **Infrastructure** | Docker                                       |
+| **Development**    | ESLint, Drizzle Kit, tsx                     |
 
 ## Installation, Database, and Environment Setup
 
@@ -234,6 +232,18 @@ The backend provides the following endpoints:
 | `PUT`    | `/links/:id`           | Updates a saved URL                                                      |
 | `DELETE` | `/links/:id`           | Deletes a specific saved URL                                             |
 | `DELETE` | `/links/`              | Deletes multiple saved URLs                                              |
+
+## Search, Filter, and Sort Functionality
+
+Implemented Material UI DataGrid to provide users with the ability to search, filter, and sort saved URLs.
+
+## reCAPTCHA Implementation
+
+Integrated Google reCAPTCHA to help protect authentication forms against automated submissions and bot activity.
+
+## Clickjacking and MIME Sniffing Protection
+
+Implemented Helmet.js to strengthen application security through HTTP security headers. These headers help prevent clickjacking attacks using `X-Frame-Options` and MIME-type sniffing using `X-Content-Type-Options`.
 
 ## Known Issues
 
