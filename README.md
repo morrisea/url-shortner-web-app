@@ -265,3 +265,6 @@ Implemented Helmet.js to strengthen application security through HTTP security h
 - JWTs - jsonwebtoken, <https://github.com/auth0/node-jsonwebtoken>
 - drizzle - Documentation, <https://orm.drizzle.team/docs/overview>
 - Material UI - Documentation, <https://mui.com/material-ui/getting-started/>
+- Google ReCAPTCHA, <https://www.google.com/recaptcha>
+- Render, <https://render.com/>
+- Clever Cloud, <https://www.clever.cloud/>
