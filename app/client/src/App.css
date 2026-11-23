@@ -69,4 +69,5 @@
   box-sizing: border-box;
   border: 1px solid var(--accent);
   border-radius: 5px;
+  visibility: hidden;
 }
